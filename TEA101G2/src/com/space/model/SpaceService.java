@@ -32,6 +32,7 @@ public class SpaceService {
 		return dao.getAll();
 	}
 	
+	//TEST
 	public List<SpaceVO> searchSpace(String spaceAddress, String spaceType, String spaceContain){
 		return dao.searchSpace(spaceAddress, spaceType, spaceContain);
 	}
