@@ -263,13 +263,13 @@
 	                        </div>
 	                        <div class="form-group">
 	                            <label for="message">Message</label>
-	                            <input type="text" id="memberCommentContent" name="memberCommentContent" class="form-control clear_memberCommentContent"" value="${param.memberCommentContent}"/>
-								<!--<textarea name="message" class="form-control"></textarea> -->
+<%-- 	                            <input type="text" id="memberCommentContent" name="memberCommentContent" class="form-control clear_memberCommentContent"" value="${param.memberCommentContent}"/> --%>
+								<textarea id="memberCommentContent" name="memberCommentContent" class="form-control clear_memberCommentContent"></textarea>
 	                        </div>
 	                    </div>
 	                    <div class="modal-footer">
 	                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	                        <input type="submit" class="btn btn-success" id="submit" value="Post Data">
+	                        <input type="submit" class="btn btn-danger" id="submit" value="Submit">
 	                    </div>
 	                </form>
 	            </div>
@@ -288,7 +288,6 @@
     	
     	$(document).on("click","span.star",function(){
         	current_star = parseInt($(this).attr("data-star"));
-        	alert(current_star);
         	if (!$(this).hasClass("yellow")) {
                 $(this).addClass("yellow");
                 $(this).prevAll().addClass("yellow");
@@ -306,7 +305,7 @@
 	    	   		data: 
 	    	   			{memberAId: '${memberAId}', 
 	    	   			memberBId: '${memberBId}',
-	    	   			memberCommentContent:$('input#memberCommentContent').val(),
+	    	   			memberCommentContent:$('textarea#memberCommentContent').val(),
 	    	   			memberCommentLevel: current_star,
 	    	   			action:'addMemberComment'},
 	    	   		success: function(data){
@@ -340,7 +339,7 @@
 	    	   			$("div.star_block").find("span.rating").remove();
 	    	   			$("div.star_block").find("label.start_level").find("i").removeClass("yellow");
 	    	   			$("div.star_block").append(star_html);
-		    	   		$("input.clear_memberCommentContent").val("");
+		    	   		$("textarea.clear_memberCommentContent").val("");
 	    	   		},
 	    	   		error: function(xhr){
 	    	   			console.log(xhr);

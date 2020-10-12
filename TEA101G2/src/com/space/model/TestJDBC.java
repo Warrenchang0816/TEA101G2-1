@@ -44,12 +44,12 @@ public class TestJDBC {
 //		System.out.println("Test All");
 		
 		//One
-		SpaceVO one = dao.selectOne("SPACE00001");
-		System.out.println(one.getSpaceId());
-		System.out.println(one.getMemId());
-		System.out.println(one.getEmpId());
-		System.out.println(one.getSpaceName());
-		System.out.println("Test One");
+//		SpaceVO one = dao.selectOne("SPACE00001");
+//		System.out.println(one.getSpaceId());
+//		System.out.println(one.getMemId());
+//		System.out.println(one.getEmpId());
+//		System.out.println(one.getSpaceName());
+//		System.out.println("Test One");
 		
 		//insert
 //		SpaceVO add = new SpaceVO();
@@ -76,24 +76,29 @@ public class TestJDBC {
 //		System.out.println("Data Deleted");
 		
 		//update
-		SpaceVO update = new SpaceVO();
-		update.setSpaceId("4");
-		update.setMemId("MEM00002");
-		update.setEmpId("EMP00004");
-		update.setSpaceAddress("NEW_ADDRESS");
-		update.setSpaceLng(123.321);
-		update.setSpaceLat(-94.87);
-		update.setSpaceName("NEW_NAME");
-		update.setSpaceType("NEW_TYPE");
-		update.setSpaceEquipment("NEW_EQUMENT");
-		update.setSpaceContain("NEW");
-		update.setSpaceRule("NEW_RULE");
-		update.setSpaceRefund("NEW_REFUND");
-		update.setSpaceStatus("F");
-		update.setSpaceSignupDate(java.sql.Date.valueOf("2020-09-01"));
-		update.setSpaceOnsaleDate(java.sql.Date.valueOf("2020-09-02"));
-		update.setSpaceOffsaleDate(java.sql.Date.valueOf("2020-09-03"));
-		dao.update(update);
-		System.out.println("data updated");
+//		SpaceVO update = new SpaceVO();
+//		update.setSpaceId("4");
+//		update.setMemId("MEM00002");
+//		update.setEmpId("EMP00004");
+//		update.setSpaceAddress("NEW_ADDRESS");
+//		update.setSpaceLng(123.321);
+//		update.setSpaceLat(-94.87);
+//		update.setSpaceName("NEW_NAME");
+//		update.setSpaceType("NEW_TYPE");
+//		update.setSpaceEquipment("NEW_EQUMENT");
+//		update.setSpaceContain("NEW");
+//		update.setSpaceRule("NEW_RULE");
+//		update.setSpaceRefund("NEW_REFUND");
+//		update.setSpaceStatus("F");
+//		update.setSpaceSignupDate(java.sql.Date.valueOf("2020-09-01"));
+//		update.setSpaceOnsaleDate(java.sql.Date.valueOf("2020-09-02"));
+//		update.setSpaceOffsaleDate(java.sql.Date.valueOf("2020-09-03"));
+//		dao.update(update);
+//		System.out.println("data updated");
+		
+		List<SpaceVO> list = dao.searchSpace(null, null, "50");
+		for(SpaceVO spaceVO : list) {
+			System.out.println(spaceVO.getSpaceAddress());
+		}
 	}
 }
