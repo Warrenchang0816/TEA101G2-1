@@ -22,7 +22,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import com.space.model.*;
-import com.spacephoto.model.*;
+import com.spacePhoto.model.*;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 5 * 1024 * 1024, maxRequestSize = 5 * 5 * 1024 * 1024)
 @WebServlet("/space/space.do")
@@ -208,7 +208,7 @@ public class SpaceServlet extends HttpServlet {
 
 				SpaceVO spaceVO = new SpaceVO();
 				spaceVO.setSpaceId(spaceId);
-				spaceVO.setMemId(memId);
+				spaceVO.setMemberId(memId);
 				spaceVO.setEmpId(empId);
 				spaceVO.setSpaceAddress(spaceAddress);
 				spaceVO.setSpaceLng(spaceLng);
@@ -333,7 +333,7 @@ public class SpaceServlet extends HttpServlet {
 
 				SpaceVO spaceVO = new SpaceVO();
 //				spaceVO.setSpaceId(spaceId);
-				spaceVO.setMemId(memId);
+				spaceVO.setMemberId(memId);
 				spaceVO.setEmpId("EMP00001");
 				spaceVO.setSpaceAddress(spaceAddress);
 				spaceVO.setSpaceLng(spaceLng);

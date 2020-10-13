@@ -1,4 +1,4 @@
-package com.spacedetail.model;
+package com.spaceDetail.model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,7 +14,7 @@ public class SpaceDetailDAO implements SpaceDetailDAO_interface {
 	String driver = "oracle.jdbc.OracleDriver";
 	String url = "jdbc:oracle:thin:@localhost:1521:XE";
 	String userid = "TEA101G2";
-	String passwd = "123456";
+	String passwd = "TEA101G2";
 	
 	private static final String INSERT_STMT =
 			"INSERT INTO SPACE_DETAIL VALUES ('SD' || lpad(SPACE_DETAIL_ID_SEQ.NEXTVAL, 5, '0'),?,?,?,?,?)";

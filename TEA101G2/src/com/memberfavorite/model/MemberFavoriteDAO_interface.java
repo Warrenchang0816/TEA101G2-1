@@ -1,4 +1,4 @@
-package com.memberfavorite.model;
+package com.memberFavorite.model;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.spacecomment.model;
+package com.spaceComment.model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,14 +8,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.spacedetail.model.SpaceDetailVO;
+import com.spaceDetail.model.SpaceDetailVO;
 
 public class SpaceCommentDAO implements SpaceCommentDAO_interface {
 	
 	String driver = "oracle.jdbc.OracleDriver";
 	String url = "jdbc:oracle:thin:@localhost:1521:XE";
 	String userid = "TEA101G2";
-	String passwd = "123456";
+	String passwd = "TEA101G2";
 	
 	private static final String INSERT_STMT =
 			"INSERT INTO SPACE_COMMENT VALUES (SPACE_COMMENT_ID_SEQ.NEXTVAL,?,?,?,?,?)";
@@ -39,7 +39,7 @@ public class SpaceCommentDAO implements SpaceCommentDAO_interface {
 			ptmt = con.prepareStatement(INSERT_STMT);
 			
 			ptmt.setString(1, spaceCommentVO.getSpaceId());
-			ptmt.setString(2, spaceCommentVO.getMemId());
+			ptmt.setString(2, spaceCommentVO.getMemberId());
 			ptmt.setString(3, spaceCommentVO.getSpaceCommentContent());
 			ptmt.setDouble(4, spaceCommentVO.getSpaceCommentLevel());
 			ptmt.setDate(5, spaceCommentVO.getSpaceCommentDate());
@@ -115,7 +115,7 @@ public class SpaceCommentDAO implements SpaceCommentDAO_interface {
 			ptmt = con.prepareStatement(UPDATE);
 			
 			ptmt.setString(1, spaceCommentVO.getSpaceId());
-			ptmt.setString(2, spaceCommentVO.getMemId());
+			ptmt.setString(2, spaceCommentVO.getMemberId());
 			ptmt.setString(3, spaceCommentVO.getSpaceCommentContent());
 			ptmt.setDouble(4, spaceCommentVO.getSpaceCommentLevel());
 			ptmt.setDate(5, spaceCommentVO.getSpaceCommentDate());
@@ -164,7 +164,7 @@ public class SpaceCommentDAO implements SpaceCommentDAO_interface {
 			while (rs.next()) {
 				spaceCommentVO.setSpaceCommentId(rs.getString("SPACE_COMMENT_ID"));
 				spaceCommentVO.setSpaceId(rs.getString("SPACE_ID"));
-				spaceCommentVO.setMemId(rs.getString("MEMBER_ID"));
+				spaceCommentVO.setMemberId(rs.getString("MEMBER_ID"));
 				spaceCommentVO.setSpaceCommentContent(rs.getString("SPACE_COMMENT_CONTENT"));
 				spaceCommentVO.setSpaceCommentLevel(rs.getDouble("SPACE_COMMENT_LEVEL"));
 				spaceCommentVO.setSpaceCommentDate(rs.getDate("SPACE_COMMENT_DATE"));
@@ -218,7 +218,7 @@ public class SpaceCommentDAO implements SpaceCommentDAO_interface {
 				spaceCommentVO = new SpaceCommentVO();
 				spaceCommentVO.setSpaceCommentId(rs.getString("SPACE_COMMENT_ID"));
 				spaceCommentVO.setSpaceId(rs.getString("SPACE_ID"));
-				spaceCommentVO.setMemId(rs.getString("MEMBER_ID"));
+				spaceCommentVO.setMemberId(rs.getString("MEMBER_ID"));
 				spaceCommentVO.setSpaceCommentContent(rs.getString("SPACE_COMMENT_CONTENT"));
 				spaceCommentVO.setSpaceCommentLevel(rs.getDouble("SPACE_COMMENT_LEVEL"));
 				spaceCommentVO.setSpaceCommentDate(rs.getDate("SPACE_COMMENT_DATE"));

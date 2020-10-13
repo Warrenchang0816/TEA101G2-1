@@ -1,4 +1,4 @@
-package com.membercomment.model;
+package com.memberComment.model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,7 +11,7 @@ import java.util.List;
 public class MemberCommentDAO implements MemberCommentDAO_interface {
 	private static final String URL = "jdbc:oracle:thin:@localhost:1521:xe";
 	private static final String USER = "TEA101G2";
-	private static final String PASSWORD = "123456";
+	private static final String PASSWORD = "TEA101G2";
 	private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
 	private static final String INSERT = "INSERT INTO MEMBER_COMMENT VALUES ('MCOMMENT' || lpad(MEMBER_COMMENT_ID_SEQ.NEXTVAL, 5, '0'),?,?,?,?,?)";
 	private static final String UPDATE = "UPDATE MEMBER_COMMENT SET MEMBER_A_ID=?,MEMBER_B_ID=?,MEMBER_COMMENT_CONTENT=?,MEMBER_COMMENT_LEVEL=?,MEMBER_COMMENT_DATE=? WHERE MEMBER_COMMENT_ID = ?";

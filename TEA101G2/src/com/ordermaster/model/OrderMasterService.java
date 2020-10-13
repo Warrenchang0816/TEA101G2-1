@@ -1,10 +1,10 @@
-package com.ordermaster.model;
+package com.orderMaster.model;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.orderdetail.model.*;
+import com.orderDetail.model.*;
 
 public class OrderMasterService {
 	

@@ -1,4 +1,4 @@
-package com.spacephoto.model;
+package com.spacePhoto.model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,14 +8,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.spacedetail.model.SpaceDetailVO;
+import com.spaceDetail.model.SpaceDetailVO;
 
 public class SpacePhotoDAO implements SpacePhotoDAO_interface {
 	
 	String driver = "oracle.jdbc.OracleDriver";
 	String url = "jdbc:oracle:thin:@localhost:1521:XE";
 	String userid = "TEA101G2";
-	String passwd = "123456";
+	String passwd = "TEA101G2";
 	
 	private static final String INSERT_STMT =
 			"INSERT INTO SPACE_PHOTO VALUES ('SPACEPHOTO' || lpad(SPACE_PHOTO_ID_SEQ.NEXTVAL, 7, '0'),?,?)";

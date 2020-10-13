@@ -14,7 +14,7 @@ public class SpaceDAO implements SpaceDAO_interface{
 	String driver = "oracle.jdbc.OracleDriver";
 	String url = "jdbc:oracle:thin:@localhost:1521:XE";
 	String userid = "TEA101G2";
-	String passwd = "123456";
+	String passwd = "TEA101G2";
 	
 
 	private static final String INSERT_STMT = 
@@ -38,7 +38,7 @@ public class SpaceDAO implements SpaceDAO_interface{
 			con = DriverManager.getConnection(url, userid, passwd);
 			ptmt = con.prepareStatement(INSERT_STMT);
 			
-			ptmt.setString(1, spaceVO.getMemId());
+			ptmt.setString(1, spaceVO.getMemberId());
 			ptmt.setString(2, spaceVO.getEmpId());
 			ptmt.setString(3, spaceVO.getSpaceAddress());
 			ptmt.setDouble(4, spaceVO.getSpaceLng());
@@ -125,7 +125,7 @@ public class SpaceDAO implements SpaceDAO_interface{
 			con = DriverManager.getConnection(url, userid, passwd);
 			ptmt = con.prepareStatement(UPDATE);
 			
-			ptmt.setString(1, spaceVO.getMemId());
+			ptmt.setString(1, spaceVO.getMemberId());
 			ptmt.setString(2, spaceVO.getEmpId());
 			ptmt.setString(3, spaceVO.getSpaceAddress());
 			ptmt.setDouble(4, spaceVO.getSpaceLng());
@@ -185,7 +185,7 @@ public class SpaceDAO implements SpaceDAO_interface{
 			rs = ptmt.executeQuery();
 			while (rs.next()) {
 				spaceVO.setSpaceId(rs.getString("SPACE_ID"));
-				spaceVO.setMemId(rs.getString("MEMBER_ID"));
+				spaceVO.setMemberId(rs.getString("MEMBER_ID"));
 				spaceVO.setEmpId(rs.getString("EMP_ID"));
 				spaceVO.setSpaceAddress(rs.getString("SPACE_ADDRESS"));
 				spaceVO.setSpaceLng(rs.getDouble("SPACE_LNG"));
@@ -251,7 +251,7 @@ public class SpaceDAO implements SpaceDAO_interface{
 			while (rs.next()) {
 				spaceVO = new SpaceVO();
 				spaceVO.setSpaceId(rs.getString("SPACE_ID"));
-				spaceVO.setMemId(rs.getString("MEMBER_ID"));
+				spaceVO.setMemberId(rs.getString("MEMBER_ID"));
 				spaceVO.setEmpId(rs.getString("EMP_ID"));
 				spaceVO.setSpaceAddress(rs.getString("SPACE_ADDRESS"));
 				spaceVO.setSpaceLng(rs.getDouble("SPACE_LNG"));
@@ -333,7 +333,7 @@ public class SpaceDAO implements SpaceDAO_interface{
 			while (rs.next()) {
 				spaceVO = new SpaceVO();
 				spaceVO.setSpaceId(rs.getString("SPACE_ID"));
-				spaceVO.setMemId(rs.getString("MEMBER_ID"));
+				spaceVO.setMemberId(rs.getString("MEMBER_ID"));
 				spaceVO.setEmpId(rs.getString("EMP_ID"));
 				spaceVO.setSpaceAddress(rs.getString("SPACE_ADDRESS"));
 				spaceVO.setSpaceLng(rs.getDouble("SPACE_LNG"));

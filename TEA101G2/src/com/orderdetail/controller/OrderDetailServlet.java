@@ -1,4 +1,4 @@
-package com.orderdetail.controller;
+package com.orderDetail.controller;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.orderdetail.model.*;
-import com.spacedetail.model.*;
+import com.orderDetail.model.*;
+import com.spaceDetail.model.*;
 import com.space.model.*;
 
 
@@ -47,7 +47,7 @@ public class OrderDetailServlet extends HttpServlet {
 				if(spaceDetailId == null || spaceDetailId.isEmpty()) errorMsgs.add("場地明細編號: 請勿空白");
 
 //---------------------------------判斷租借時間是否有效-----------------------------------------------------
-				SpaceDetailService spaceDetailSvc = new SpaceDetailService();
+				SpaceDetailServiceB spaceDetailSvc = new SpaceDetailServiceB();
 				OrderDetailService orderDetailSvc = new OrderDetailService();
 				SpaceDetailVO spaceDetailVO = spaceDetailSvc.selectOneSpaceDetail(spaceDetailId);
 				List<OrderDetailVO> oldorderlist = orderDetailSvc.selectAllOrderDetailBySD(spaceDetailId);

@@ -1,4 +1,4 @@
-package com.spacedetail.controller;
+package com.spaceDetail.controller;
 
 import java.io.*;
 import java.util.*;
@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
-import com.ordermaster.model.OrderMasterVO;
-import com.spacedetail.model.*;
+import com.orderMaster.model.OrderMasterVO;
+import com.spaceDetail.model.*;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 5 * 1024 * 1024, maxRequestSize = 5 * 5 * 1024 * 1024)
 @WebServlet("/spacedetail/spacedetail.do")

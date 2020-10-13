@@ -1,4 +1,4 @@
-package com.ordermaster.model;
+package com.orderMaster.model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,7 +14,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import com.orderdetail.model.*;
+import com.orderDetail.model.*;
 
 public class OrderMasterDAO implements OrderMasterDAOInterface{
 	

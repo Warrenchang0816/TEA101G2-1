@@ -1,4 +1,4 @@
-package com.spacecomment.model;
+package com.spaceComment.model;
 
 import java.util.List;
 

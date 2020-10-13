@@ -1,4 +1,4 @@
-package com.spacephoto.controller;
+package com.spacePhoto.controller;
 import java.io.*;
 import java.util.*;
 
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
-import com.spacephoto.model.*;
+import com.spacePhoto.model.*;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 5 * 1024 * 1024, maxRequestSize = 5 * 5 * 1024 * 1024)
 @WebServlet("/spacephoto/spacephoto.do")

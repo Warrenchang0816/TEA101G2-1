@@ -1,4 +1,4 @@
-package com.ordermaster.controller;
+package com.orderMaster.controller;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -15,9 +15,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ordermaster.model.*;
-import com.orderdetail.model.*;
-import com.spacedetail.model.*;
+import com.orderMaster.model.*;
+import com.orderDetail.model.*;
+import com.spaceDetail.model.*;
 
 
 @WebServlet("/OrderMasterServlet")
@@ -142,7 +142,7 @@ public class OrderMasterServlet extends HttpServlet {
 				//撈出資料建立OrderDetailVO，並將OrderMaster總金額修改成訂單總金額
 				List<OrderDetailVO> odlist = new ArrayList<OrderDetailVO>();
 				OrderDetailService orderDetailSvc = new OrderDetailService();
-				SpaceDetailService spaceDetailSvc = new SpaceDetailService();
+				SpaceDetailServiceB spaceDetailSvc = new SpaceDetailServiceB();
 				
 				
 				for (int i = 0; i < rentStartTimelist.length; i++) {

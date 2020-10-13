@@ -11,7 +11,7 @@ import java.util.List;
 public class MemberDAO implements MemberDAO_interface {
 	private static final String URL = "jdbc:oracle:thin:@localhost:1521:xe";
 	private static final String USER = "TEA101G2";
-	private static final String PASSWORD = "123456";
+	private static final String PASSWORD = "TEA101G2";
 	private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
 	private static final String INSERT = "INSERT INTO MEMBER ( MEMBER_ID, MEMBER_ACCOUNT, MEMBER_PASSWORD, MEMBER_NAME, MEMBER_NICKNAME, MEMBER_EMAIL, MEMBER_PHOTO, MEMBER_PHONE, MEMBER_ADDRESS, MEMBER_BIRTH, MEMBER_SEX, MEMBER_COUNTRY, MEMBER_SIGNUP_DATE, MEMBER_AUTH, MEMBER_STATUS ) VALUES ( 'MEM' || lpad(MEMBER_ID_SEQ.NEXTVAL, 5, '0' ),?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	private static final String GET_ALL = "SELECT * FROM MEMBER";

@@ -1,4 +1,4 @@
-package com.memberfavorite.controller;
+package com.memberFavorite.controller;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.memberfavorite.model.MemberFavoriteService;
-import com.memberfavorite.model.MemberFavoriteVO;
+import com.memberFavorite.model.MemberFavoriteService;
+import com.memberFavorite.model.MemberFavoriteVO;
 
 @WebServlet("/MemberFavoriteServlet.do")
 public class MemberFavoriteServlet extends HttpServlet {

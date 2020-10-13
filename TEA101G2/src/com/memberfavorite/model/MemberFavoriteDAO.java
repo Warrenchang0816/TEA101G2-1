@@ -1,4 +1,4 @@
-package com.memberfavorite.model;
+package com.memberFavorite.model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,7 +11,7 @@ import java.util.List;
 public class MemberFavoriteDAO implements MemberFavoriteDAO_interface {
 	private static final String URL = "jdbc:oracle:thin:@localhost:1521:xe";
 	private static final String USER = "TEA101G2";
-	private static final String PASSWORD = "123456";
+	private static final String PASSWORD = "TEA101G2";
 	private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
 	private static final String INSERT = "INSERT INTO MEMBER_FAVORITE VALUES ('FAVORITE' || lpad(MEMBER_FAVORITE_ID_SEQ.NEXTVAL, 5, '0' ),?,?)";
 	private static final String UPDATE = "UPDATE MEMBER_FAVORITE SET MEMBER_ID=?,SPACE_ID=? WHERE MEMBER_FAVORITE_ID = ?";

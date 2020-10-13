@@ -1,8 +1,8 @@
-package com.ordermaster.model;
+package com.orderMaster.model;
 
 import java.util.List;
 
-import com.orderdetail.model.OrderDetailVO;
+import com.orderDetail.model.OrderDetailVO;
 
 public interface OrderMasterDAOInterface {
 	public void insert(OrderMasterVO orderMasterVO);

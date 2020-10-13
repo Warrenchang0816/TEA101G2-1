@@ -1,4 +1,4 @@
-package com.spacedetail.model;
+package com.spaceDetail.model;
 
 import java.util.List;
 
