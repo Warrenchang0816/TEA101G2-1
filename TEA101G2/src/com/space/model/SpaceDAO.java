@@ -305,7 +305,6 @@ public class SpaceDAO implements SpaceDAO_interface{
 		Connection con = null;
 		PreparedStatement ptmt = null;
 		ResultSet rs = null;
-		
 		SpaceVO spaceVO = null;
 		List<SpaceVO> list = new ArrayList<SpaceVO>();;
 
@@ -315,7 +314,7 @@ public class SpaceDAO implements SpaceDAO_interface{
 			
 			StringBuffer SEARCH_SPACE = new StringBuffer("SELECT * FROM SPACE WHERE 123=123");
 			
-			if(spaceAddress != null && !spaceAddress.equals("")) {
+			if(spaceAddress != null && !spaceAddress.trim().equals("")) {
 				SEARCH_SPACE.append(" AND SPACE_ADDRESS LIKE '%"+spaceAddress+"%'");
 			}
 			
@@ -323,7 +322,7 @@ public class SpaceDAO implements SpaceDAO_interface{
 				SEARCH_SPACE.append(" AND SPACE_TYPE ='"+spaceType+"'");
 			}
 			
-			if(spaceContain != null && !spaceContain.equals("")) {
+			if(spaceContain != null && !spaceContain.trim().equals("")) {
 				SEARCH_SPACE.append(" AND SPACE_CONTAIN >= '"+spaceContain+"'");
 			}
 			
@@ -350,7 +349,6 @@ public class SpaceDAO implements SpaceDAO_interface{
 				spaceVO.setSpaceSignupDate(rs.getDate("SPACE_SIGNUP_DATE"));
 				spaceVO.setSpaceOnsaleDate(rs.getDate("SPACE_ONSALE_DATE"));
 				spaceVO.setSpaceOffsaleDate(rs.getDate("SPACE_OFFSALE_DATE"));
-				
 				list.add(spaceVO);
 			}
 

@@ -135,8 +135,8 @@ public class MemberServlet extends HttpServlet {
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				RequestDispatcher failureView = req.getRequestDispatcher("/member/addMember.jsp");
-				failureView.forward(req, res);
+				RequestDispatcher failView = req.getRequestDispatcher("/member/addMember.jsp");
+				failView.forward(req, res);
 			}
 		}
 		

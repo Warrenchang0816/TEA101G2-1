@@ -296,6 +296,9 @@
             }
         });
     	
+    	var Today=new Date();
+    	var commentData = (Today.getFullYear()+ "-" + (Today.getMonth()+1) + "-" + Today.getDate());
+    	
 	    $(document).ready(function(){	
 	    	$("#contactForm").submit(function(event) {
 	    		$.ajax({
@@ -319,10 +322,9 @@
 		    	   		star_html += '<span class="star" data-star="4"><i class="fa fa-fw fa-star"></i></span>';
 		    	   		star_html += '<span class="star" data-star="5"><i class="fa fa-fw fa-star"></i></span>';
 		    	   		star_html += '</span>';
-		               	
 		    	   	    list_html += '<li class="list-item">';
-		    	   	    list_html += '<span>' + data.memberCommentDate + '</span><span class="rating">';
-		    	   	    list_html += '<i class="fa fa-fw fa-star'+(data.memberCommentLevel >= 1 ? " yellow" : "")+'"></i>';
+		    	   	    list_html += '<span>'+commentData+'</span><span class="rating">';
+		    	  	 	list_html += '<i class="fa fa-fw fa-star'+(data.memberCommentLevel >= 1 ? " yellow" : "")+'"></i>';
 		    	   	    list_html += '<i class="fa fa-fw fa-star'+(data.memberCommentLevel >= 2 ? " yellow" : "")+'"></i>';
 		    	   	    list_html += '<i class="fa fa-fw fa-star'+(data.memberCommentLevel >= 3 ? " yellow" : "")+'"></i>';
 		    	   	    list_html += '<i class="fa fa-fw fa-star'+(data.memberCommentLevel >= 4 ? " yellow" : "")+'"></i>';
