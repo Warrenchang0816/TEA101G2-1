@@ -21,7 +21,7 @@ import com.member.model.ChatMessage;
 import com.member.model.State;
 import com.websocketchat.jedis.JedisHandleMessage;
 
-@ServerEndpoint("/Friend/{userName}")
+@ServerEndpoint("/FriendWS/{userName}")
 public class FriendWS {
 	private static Map<String, Session> sessionsMap = new ConcurrentHashMap<>();
 	Gson gson = new Gson();
