@@ -35,4 +35,18 @@
 		<dispatcher>ASYNC</dispatcher>
 	</filter-mapping>
 	
+	  <filter>
+	  <filter-name>backendLoginFilter</filter-name>
+	  <filter-class>com.login.filter.backendLoginFilter</filter-class>
+  </filter>
+  <filter-mapping>
+	  <filter-name>backendLoginFilter</filter-name>
+	  <url-pattern>/backend/*</url-pattern>
+	  <dispatcher>REQUEST</dispatcher>
+	  <dispatcher>FORWARD</dispatcher>
+	  <dispatcher>INCLUDE</dispatcher>
+	  <dispatcher>ERROR</dispatcher>
+	  <dispatcher>ASYNC</dispatcher>
+  </filter-mapping>
+	
 </web-app>
