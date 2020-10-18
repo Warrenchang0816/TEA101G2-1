@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.space.model.*"%>
-<%@ page import="com.spacephoto.model.*"%>
+<%@ page import="com.spacePhoto.model.*"%>
 
 <%-- 此頁練習採用 EL 的寫法取值 --%>
 
@@ -24,19 +24,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <!-- BASE CSS -->
-    <link href="<%=request.getContextPath()%>/plugins/css/bootstrap.min.css" rel="stylesheet">
-    <link href="<%=request.getContextPath()%>/plugins/css/style.css" rel="stylesheet">
-	<link href="<%=request.getContextPath()%>/plugins/css/vendors.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/frontend/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/frontend/css/style.css" rel="stylesheet">
+	<link href="<%=request.getContextPath()%>/frontend/css/vendors.css" rel="stylesheet">
 
 <!-- Your custom styles -->
-    <link href="<%=request.getContextPath()%>/plugins/css/custom.css" rel="stylesheet" type="text/css">
+    <link href="<%=request.getContextPath()%>/frontend/css/custom.css" rel="stylesheet" type="text/css">
 
 <!-- Favicons-->
-    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" type="image/x-icon" href="img/apple-touch-icon-57x57-precomposed.png">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="img/apple-touch-icon-72x72-precomposed.png">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="img/apple-touch-icon-114x114-precomposed.png">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" href="img/apple-touch-icon-144x144-precomposed.png">
+    <link rel="shortcut icon" href="<%=request.getContextPath()%>/frontend/img/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" type="image/x-icon" href="<%=request.getContextPath()%>/frontend/img/apple-touch-icon-57x57-precomposed.png">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="<%=request.getContextPath()%>/frontend/img/apple-touch-icon-72x72-precomposed.png">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="<%=request.getContextPath()%>/frontend/img/apple-touch-icon-114x114-precomposed.png">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" href="<%=request.getContextPath()%>/frontend/img/apple-touch-icon-144x144-precomposed.png">
     
 </head>
 <body>
@@ -98,14 +98,14 @@
 <!-- page -->
 
 <!-- COMMON SCRIPTS -->
-  	<script src="<%=request.getContextPath()%>/plugins/js/common_scripts.js"></script>
-  	<script src="<%=request.getContextPath()%>/plugins/js/main.js"></script>
+  	<script src="<%=request.getContextPath()%>/frontend/js/common_scripts.js"></script>
+  	<script src="<%=request.getContextPath()%>/frontend/js/main.js"></script>
 	
 <!-- Map -->
 	<script src="http://maps.googleapis.com/maps/api/js"></script>
-	<script src="<%=request.getContextPath()%>/plugins/js/markerclusterer.js"></script>
-	<script src="<%=request.getContextPath()%>/plugins/js/map_hotels.js"></script>
-	<script src="<%=request.getContextPath()%>/plugins/js/infobox.js"></script>
+	<script src="<%=request.getContextPath()%>/frontend/js/markerclusterer.js"></script>
+	<script src="<%=request.getContextPath()%>/frontend/js/map_hotels.js"></script>
+	<script src="<%=request.getContextPath()%>/frontend/js/infobox.js"></script>
 	
 </body>
 </html>

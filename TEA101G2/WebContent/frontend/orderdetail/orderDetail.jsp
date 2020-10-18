@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
 				
-<%@ page import="com.orderdetail.model.*"%>
+<%@ page import="com.orderDetail.model.*"%>
 
 <%
 	OrderDetailVO orderDetailVO = (OrderDetailVO) request.getAttribute("selectOneOrderDetail");
@@ -32,7 +32,7 @@
 				</form>
 			</li>
 			
-			<jsp:useBean id="orderDetailSvc" scope="page" class="com.orderdetail.model.OrderDetailService" />
+			<jsp:useBean id="orderDetailSvc" scope="page" class="com.orderDetail.model.OrderDetailService" />
 			<li>
 				<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/OrderDetailServlet">
 					<b>選擇場地編號:</b> 

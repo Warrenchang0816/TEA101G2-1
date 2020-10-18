@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page import="com.spacedetail.model.*"%>
+<%@ page import="com.spaceDetail.model.*"%>
 
 <%
   SpaceDetailVO spaceDetailVO = (SpaceDetailVO) request.getAttribute("spaceDetailVO");
@@ -65,7 +65,7 @@
 		<td><input type="TEXT" name="spaceDetailCharge" size="45" value="870" /></td>
 	</tr>
 		
- 	<jsp:useBean id="spaceDetailSvc" scope="page" class="com.spacedetail.model.SpaceDetailService" />
+ 	<jsp:useBean id="spaceDetailSvc" scope="page" class="com.spaceDetail.model.SpaceDetailService" />
 
 </table>
 <br>

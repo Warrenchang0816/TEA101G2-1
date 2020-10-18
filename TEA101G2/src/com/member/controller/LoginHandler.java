@@ -47,6 +47,8 @@ public class LoginHandler extends HttpServlet {
 			if (userVO != null) {
 				HttpSession session = req.getSession();
 				session.setAttribute("userVO", userVO);
+				MemberService ms = new MemberService();
+				ms.updateMemberOnline(userVO, "Y");
 
 				try {
 					String location = (String) session.getAttribute("location");

@@ -13,7 +13,7 @@ pageContext.setAttribute("errorMsgs",errorMsgs);
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+<meta charset="BIG5">
 <title>Error</title>
 </head>
 <body>

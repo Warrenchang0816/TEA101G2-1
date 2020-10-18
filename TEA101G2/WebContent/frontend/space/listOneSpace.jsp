@@ -1,11 +1,10 @@
-<%@ page import="sun.misc.BASE64Encoder"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
-<%@ page import="com.spacephoto.model.*"%>
+<%@ page import="com.spacePhoto.model.*"%>
 <%@ page import="com.space.model.*"%>
-<%@ page import="com.spacedetail.model.*"%>
-<%@ page import="com.orderdetail.model.*"%>
+<%@ page import="com.spaceDetail.model.*"%>
+<%@ page import="com.orderDetail.model.*"%>
 
 <%
   SpaceVO spaceVO = (SpaceVO) request.getAttribute("spaceVO"); //SpaceServlet.java(Concroller), 存入req的spaceVO物件
@@ -113,7 +112,7 @@
 							</div>
 							
 							<input type="hidden" name="spaceId" value="<%=spaceVO.getSpaceId()%>">
-							<input type="hidden" name="memberId" value="<%=spaceVO.getMemId()%>">
+							<input type="hidden" name="memberId" value="<%=spaceVO.getMemberId()%>">
 							<input type="hidden" name="orderCreateDate" value="<%=new Date()%>">
 							<input type="hidden" name="action" value="listAllSpaceDetailBySpace">
 							<input type="submit" value="搶先預約!" class="add_top_30 btn_1 full-width purchase">

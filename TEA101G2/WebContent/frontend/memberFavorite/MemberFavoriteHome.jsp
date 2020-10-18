@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
-<%@ page import="com.memberfavorite.model.*"%>
+<%@ page import="com.memberFavorite.model.*"%>
 
 <%
 	MemberFavoriteVO MemberFavoriteVO = (MemberFavoriteVO) request.getAttribute("memberFavoriteVO");
@@ -34,7 +34,7 @@
 				</form>
 			</li>
 			
-			<jsp:useBean id="memberFavoriteSvc" scope="page" class="com.memberfavorite.model.MemberFavoriteService" />
+			<jsp:useBean id="memberFavoriteSvc" scope="page" class="com.memberFavorite.model.MemberFavoriteService" />
 			<li>
 				<form method="post" action="<%=request.getContextPath()%>/MemberFavoriteServlet.do">
 					<b>選擇收藏編號:</b> 

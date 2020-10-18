@@ -1,6 +1,21 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="java.util.*"%>
+<%@ page import="java.util.stream.*"%>
+<%@ page import="com.emp.model.*"%>
 
+<%
+
+Map<String, String> chatNames = new HashMap<String, String>();
+EmpService es = new EmpService();
+List<EmpVO> empList = es.selectAllEmp();
+chatNames = empList.stream().collect(Collectors.toMap(EmpVO::getEmpId, EmpVO::getEmpName));
+Set<Map.Entry<String, String>> entries = chatNames.entrySet();
+Stream<Map.Entry<String, String>> entriesStream = entries.stream();
+String theName = entriesStream.filter(name -> name.getKey().equals("EMP00007")).map(Map.Entry::getValue).findFirst().get();
+pageContext.setAttribute("theName", theName);
+
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -237,6 +252,13 @@ h1.chat {
   float: right;
 }
 
+.time{
+    font-size: 0.01em;
+	position: relative;
+	left: 5%;
+	float: right;
+}
+
 .me .message.last:before {
   content: "";
   position: absolute;
@@ -293,18 +315,18 @@ h1.chat {
   </form>
 </div>
 --%>
-<body onload="connect();" onunload="disconnect();">
+<body>
 <div class="chat-popup" id="myForm" style="height: 350px; background-color: white;">
   <div class="form-container">
-    <h1 class="chat">Chat</h1>
+    <h1 class="chat">${loginEmp.empName}</h1>
    	<label for="conv"><b>To: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></label>
    	<select id="receiver" size="1" class="receiver">
 	</select>
     <%-- <h3 id="statusOutput" class="statusOutput"></h3> --%>
 	<div id="messagesArea" class="panel message-area" ></div>
 	<div class="panel input-area">
-		<input id="message" class="text-field" type="text" placeholder="Message" onkeydown="if (event.keyCode == 13) sendMessage();" /> 
-		<button type="submit" id="sendMessage" class="btn btn-link" onclick="sendMessage();">
+		<input id="message" class="text-field" type="text" placeholder="Message" onkeydown="if (event.keyCode == 13) sendChatMessage();" /> 
+		<button type="submit" id="sendMessage" class="btn btn-link" onclick="sendChatMessage();">
 			<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-right-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 			  <path d="M12.14 8.753l-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
 			</svg>
@@ -326,247 +348,203 @@ h1.chat {
 	var webCtx = path.substring(0, path.indexOf('/', 1));
 	var endPointURL = "ws://" + window.location.host + webCtx + MyPoint;
 
-	var statusOutput = document.getElementById("statusOutput");
 	var messagesArea = document.getElementById("messagesArea");
 	var self = '${loginEmp.empId}';
 	var chatWebSocket;
-	var array = [];
 	
-	function openForm(objButton) {
+	var array = [];
+	var idName;
+	
+	
+	
+	function clickToChat(objButton) {
 		  document.getElementById("myForm").style.display = "block";
 		  
 		  var friend = objButton.value;
-		  var receiver = document.getElementById("receiver");
-		  receiver.value = friend;
-		  
-		  if(array.length === 0){
-				array.push(friend);
-				var option = document.createElement("option");
-				option.text = friend;
-				receiver.add(option);
-			}else{
-				if(!array.includes(friend)){
-			        array.push(friend);
-					var option = document.createElement("option");
-					option.text = friend;
-					receiver.add(option);
-				};
-		   	}
-		  
-		  addListener();
-		  
-		  <%--
-		  if(array.isEmpty){
-			  array.push(friend);
-			  var option = document.createElement("option");
-			  option.text = friend;
-			  receiver.add(option);
-		  }else{
-			  array.forEach(element =>{
-				  if(element != friend){
-					  array.push(friend);
-					  var option = document.createElement("option");
-					  option.text = friend;
-					  receiver.add(option);
-				  };
-			  })
-		  }
-		--%>
-		  
-		  
-			// create a websocket
-			chatWebSocket = new WebSocket(endPointURL);
-			chatWebSocket.onopen = function(event) {
-				console.log("Connect Success!");
-			};
+		  $.when($.ajax({
+			    type: 'POST',
+			    url: '<%=request.getContextPath()%>/EmpServlet',
+			    dataType: "json",
+			    data: {
+			    	action: 'selectAllEmpIdName',
+			    },
+			    success: function(data) {
+			    },
+			})).done(function (data){
+				 <%--
+				  var datetime = "Last Sync: " + currentdate.getDate() + "/"
+		          + (currentdate.getMonth()+1)  + "/" 
+		          + currentdate.getFullYear() + " @ "  
+		          + currentdate.getHours() + ":"  
+		          + currentdate.getMinutes() + ":" 
+		          + currentdate.getSeconds();
+				  --%>
+				  
+				  if(array.length === 0){
+					  console.log("FUCKK11111")
+						array.push(friend);
+						let name_array = JSON.stringify(array);
+						sessionStorage.setItem('name_array', name_array);
+						var option = document.createElement("option");
+						option.text = data.map[friend];
+						receiver.add(option);
+					}else{
+						if(!array.includes(friend)){
+							console.log("FUCKK22222")
+					        array.push(friend);
+					        let name_array = JSON.stringify(array);
+							sessionStorage.setItem('name_array', name_array);
+							var option = document.createElement("option");
+							option.text = data.map[friend];
+							receiver.add(option);
+							$('#receiver > option').each(function() {
+								console.log("FUCKK3333355555")
+								if(this.value === data.map[friend]){
+									console.log("this.value:"+this.value)
+									console.log("data.map[friend]:"+data.map[friend])
+									this.selected = true;
+								}
+							})
+							
+						}else{
+							console.log("FUCKK33333")
+							$('#receiver > option').each(function() {
+								console.log("FUCKK3333355555")
+								if(this.value === data.map[friend]){
+									console.log("this.value:"+this.value)
+									console.log("data.map[friend]:"+data.map[friend])
+									this.selected = true;
+								}
+							})
+							console.log("FUCKK44444")
+						}
+				   	}
+				  
+				  chatListener();
+				  
+					// create a websocket
+					chatWebSocket = new WebSocket(endPointURL);
+					chatWebSocket.onopen = function(event) {
+						console.log("ChatConnect Success!");
+					};
 
-			chatWebSocket.onmessage = function(event) {
-				var jsonObj = JSON.parse(event.data);
-				console.log("FUCKKK11")
-				console.log(friend);
-				if ("open" === jsonObj.type) {
-					console.log("FUCKKKon")
-					
-					var jsonObj = {
-							"type" : "history",
-							"sender" : self,
-							"receiver" : friend,
-							"message" : ""
-						};
-					chatWebSocket.send(JSON.stringify(jsonObj));
-					console.log("FUCKKKYAY")
-				} else if ("history" === jsonObj.type) {
-					messagesArea.innerHTML = '';
-					var ul = document.createElement('ul');
-					ul.id = "area";
-					messagesArea.appendChild(ul);
-					console.log("FUCKKK33")
-					
-					// 這行的jsonObj.message是從redis撈出跟好友的歷史訊息，再parse成JSON格式處理
-					var messages = JSON.parse(jsonObj.message);
-					for (var i = 0; i < messages.length; i++) {
-						var historyData = JSON.parse(messages[i]);
-						var showMsg = historyData.message;
-						var li = document.createElement('li');
-						var div = document.createElement('div');
-						var newContent = historyData.sender === self ? document.createTextNode('我: ' + showMsg) : document.createTextNode(historyData.sender + ': ' + showMsg);
-						// 根據發送者是自己還是對方來給予不同的class名, 以達到訊息左右區分
-						historyData.sender === self ? li.className += 'me messages' : li.className += 'friend messages';
-						historyData.sender === self ? div.className += 'me message last' : div.className += 'friend message last';
-						ul.appendChild(li);
-						li.appendChild(div);
-						div.appendChild(newContent);
-						console.log("FUCKKK44")
-					}
-					messagesArea.scrollTop = messagesArea.scrollHeight;
-				} else if ("chat" === jsonObj.type) {
-					console.log("FUCKKK55")
-					var li = document.createElement('li');
-					var div = document.createElement('div');
-					div.className  = "message last";
-					var newContent = jsonObj.sender === self ? document.createTextNode('我: ' + jsonObj.message) : document.createTextNode(jsonObj.sender + ': ' + jsonObj.message);
-					jsonObj.sender === self ? li.className += 'me messages' : li.className += 'friend messages';
-					console.log(li);
-					document.getElementById("area").appendChild(li);
-					li.appendChild(div);
-					div.appendChild(newContent);
-					messagesArea.scrollTop = messagesArea.scrollHeight;
-					console.log("FUCKKK66")
-					
-					let messh6 = document.getElementById('messh6');
-					let friend = document.getElementById("receiver").value
-					
-					let list_html = `
-			            <div class="dropdown-divider"></div>
-			            <a class="dropdown-item" href="#">
-			              <span class="text-success">
-			              <strong>${loginEmp.empAccount}</strong>
-			              </span>
-			              <span class="small float-right text-muted">11:21 AM</span>
-			              <div class="dropdown-message small">${newContent}</div>
-			            </a>
-			            `
-			        $("#messh6").after(list_html);
-					
-					
-				} else if ("close" === jsonObj.type) {
-					console.log("FUCKKKoff")
-				}
-				
-			};
+					chatWebSocket.onmessage = function(event) {
+						var jsonObj = JSON.parse(event.data);
+						if ("open" === jsonObj.type) {
+							
+							var jsonObj = {
+									"type" : "history",
+									"sender" : self,
+									"receiver" : friend,
+									"message" : "",
+									"time" : datetime
+								};
+							chatWebSocket.send(JSON.stringify(jsonObj));
+						} else if ("history" === jsonObj.type) {
+							messagesArea.innerHTML = '';
+							var ul = document.createElement('ul');
+							ul.id = "area";
+							messagesArea.appendChild(ul);
+							
+							// 這行的jsonObj.message是從redis撈出跟好友的歷史訊息，再parse成JSON格式處理
+							var messages = JSON.parse(jsonObj.message);
+							for (var i = 0; i < messages.length; i++) {
+								var historyData = JSON.parse(messages[i]);
+								var showMsg = historyData.message;
+								var datetime = historyData.time;
+								var li = document.createElement('li');
+								var div = document.createElement('div');
+								var span = document.createElement('span');
+								var newContent = historyData.sender === self ? document.createTextNode('我: ' + showMsg) : document.createTextNode(data.map[historyData.sender] + ': ' + showMsg);
+								// 根據發送者是自己還是對方來給予不同的class名, 以達到訊息左右區分
+								historyData.sender === self ? li.className += 'me messages' : li.className += 'friend messages';
+								historyData.sender === self ? div.className += 'me message last' : div.className += 'friend message last';
+								ul.appendChild(li);
+								li.appendChild(div);
+								li.appendChild(span);
+								span.innerHTML = datetime;
+								div.appendChild(newContent);
+							}
+							messagesArea.scrollTop = messagesArea.scrollHeight;
+						} else if ("chat" === jsonObj.type && friend === jsonObj.sender && self === jsonObj.receiver) {
+							var currentdate = new Date(); 
+							var datetime = currentdate.getHours()  + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+							var li = document.createElement('li');
+							var div = document.createElement('div');
+							var span = document.createElement('span');
+							div.className  = "message last";
+							var newContent = jsonObj.sender === self ? document.createTextNode('我: ' + jsonObj.message) : document.createTextNode(data.map[jsonObj.sender] + ': ' + jsonObj.message);
+							jsonObj.sender === self ? li.className += 'me messages' : li.className += 'friend messages';
+							console.log(li);
+							document.getElementById("area").appendChild(li);
+							li.appendChild(div);
+							div.appendChild(newContent);
+							li.appendChild(span);
+							span.innerHTML = datetime;
+							messagesArea.scrollTop = messagesArea.scrollHeight;
+							
+							
+							
+						} else if ("close" === jsonObj.type) {
+							console.log("FUCKKKoff")
+						}
+						
+					};
 
-			chatWebSocket.onclose = function(event) {
-				console.log("Disconnected!");
-			};
+					chatWebSocket.onclose = function(event) {
+						console.log("ChatDisconnected!");
+					};
+			})
+		  
+		 
 		  
 	}
-<%--
-	function connect() {
-		// create a websocket
-		chatWebSocket = new WebSocket(endPointURL);
-		
-		chatWebSocket.onopen = function(event) {
-			console.log("Connect Success!");
-			document.getElementById('sendMessage').disabled = false;
-		};
 
-		chatWebSocket.onmessage = function(event) {
-			var jsonObj = JSON.parse(event.data);
-			console.log("FUCKKK11")
-			console.log(friend);
-			if ("open" === jsonObj.type) {
-				console.log("FUCKKKon")
-				
+	function sendChatMessage() {
+		$.when($.ajax({
+		    type: 'POST',
+		    url: '<%=request.getContextPath()%>/EmpServlet',
+		    dataType: "json",
+		    data: {
+		    	action: 'selectAllEmpIdNameR',
+		    },
+		    success: function(data) {
+		    },
+		})).done(function (data){
+			var currentdate = new Date(); 
+			var datetime = currentdate.getHours()  + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+			var inputMessage = document.getElementById("message");
+			var friend = document.getElementById("receiver").value;
+			var selcetId = data.map[friend];
+			var message = inputMessage.value.trim();
+
 				var jsonObj = {
-						"type" : "history",
-						"sender" : self,
-						"receiver" : friend,
-						"message" : ""
-					};
+					"type" : "chat",
+					"sender" : self,
+					"receiver" : selcetId,
+					"message" : message,
+					"time" : datetime
+				};
 				chatWebSocket.send(JSON.stringify(jsonObj));
-				console.log("FUCKKKYAY")
-			} else if ("history" === jsonObj.type) {
-				messagesArea.innerHTML = '';
-				var ul = document.createElement('ul');
-				ul.id = "area";
-				messagesArea.appendChild(ul);
-				console.log("FUCKKK33")
+				inputMessage.value = "";
+				inputMessage.focus();
 				
-				// 這行的jsonObj.message是從redis撈出跟好友的歷史訊息，再parse成JSON格式處理
-				var messages = JSON.parse(jsonObj.message);
-				for (var i = 0; i < messages.length; i++) {
-					var historyData = JSON.parse(messages[i]);
-					var showMsg = historyData.message;
-					var li = document.createElement('li');
-					var div = document.createElement('div');
-					var newContent = historyData.sender === self ? document.createTextNode('我: ' + showMsg) : document.createTextNode(historyData.sender + ': ' + showMsg);
-					// 根據發送者是自己還是對方來給予不同的class名, 以達到訊息左右區分
-					historyData.sender === self ? li.className += 'me messages' : li.className += 'friend messages';
-					historyData.sender === self ? div.className += 'me message last' : div.className += 'friend message last';
-					ul.appendChild(li);
-					li.appendChild(div);
-					div.appendChild(newContent);
-					console.log("FUCKKK44")
-				}
-				messagesArea.scrollTop = messagesArea.scrollHeight;
-			} else if ("chat" === jsonObj.type) {
-				console.log("FUCKKK55")
 				var li = document.createElement('li');
 				var div = document.createElement('div');
+				var span = document.createElement('span');
 				div.className  = "message last";
-				var newContent = document.createTextNode(jsonObj.message);
-				jsonObj.sender === self ? li.className += 'me messages' : li.className += 'friend messages';
-				console.log(li);
+				var newContent = document.createTextNode('我: ' + jsonObj.message);
+				li.className += 'me messages';
+				span.className += 'time';
 				document.getElementById("area").appendChild(li);
 				li.appendChild(div);
 				div.appendChild(newContent);
+				li.appendChild(span);
+				span.append(datetime);
 				messagesArea.scrollTop = messagesArea.scrollHeight;
-				console.log("FUCKKK66")
-				
-				let messh6 = document.getElementById('messh6');
-				let friend = document.getElementById("receiver").value
-				
-				let list_html = `
-		            <div class="dropdown-divider"></div>
-		            <a class="dropdown-item" href="#">
-		              <span class="text-success">
-		              <strong>${loginEmp.empAccount}</strong>
-		              </span>
-		              <span class="small float-right text-muted">11:21 AM</span>
-		              <div class="dropdown-message small">${newContent}</div>
-		            </a>
-		            `
-		        $("#messh6").after(list_html);
-				
-				
-			} else if ("close" === jsonObj.type) {
-				console.log("FUCKKKoff")
-			}
 			
-		};
-
-		chatWebSocket.onclose = function(event) {
-			console.log("Disconnected!");
-		};
-	}
-
-	--%>
-	function sendMessage() {
-		var inputMessage = document.getElementById("message");
-		var friend = document.getElementById("receiver").value;
-		console.log(friend)
-		var message = inputMessage.value.trim();
-
-
-			var jsonObj = {
-				"type" : "chat",
-				"sender" : self,
-				"receiver" : friend,
-				"message" : message
-			};
-			chatWebSocket.send(JSON.stringify(jsonObj));
-			inputMessage.value = "";
-			inputMessage.focus();
+		});
+		
 		
 	}
 
@@ -574,94 +552,92 @@ h1.chat {
 
 	// 註冊列表點擊事件並抓取好友名字以取得歷史訊息
 	
-	function addListener() {
-		var receiver = document.getElementById("receiver");
-		receiver.addEventListener("change", function(e) {
-			
-			var friend = $("#receiver option:selected").text();
-			
-			chatWebSocket = new WebSocket(endPointURL);
-			chatWebSocket.onopen = function(event) {
-				console.log("Connect Success!");
-			};
-			chatWebSocket.onmessage = function(event) {
-				var jsonObj = JSON.parse(event.data);
-				console.log("FUCKKK11")
-				console.log(friend);
-				if ("open" === jsonObj.type) {
-					console.log("FUCKKKon")
-					
-					var jsonObj = {
-							"type" : "history",
-							"sender" : self,
-							"receiver" : friend,
-							"message" : ""
-						};
-					chatWebSocket.send(JSON.stringify(jsonObj));
-					console.log("FUCKKKYAY")
-				} else if ("history" === jsonObj.type) {
-					messagesArea.innerHTML = '';
-					var ul = document.createElement('ul');
-					ul.id = "area";
-					messagesArea.appendChild(ul);
-					console.log("FUCKKK33")
-					
-					// 這行的jsonObj.message是從redis撈出跟好友的歷史訊息，再parse成JSON格式處理
-					var messages = JSON.parse(jsonObj.message);
-					for (var i = 0; i < messages.length; i++) {
-						var historyData = JSON.parse(messages[i]);
-						var showMsg = historyData.message;
+	function chatListener() {
+		$.when($.ajax({
+		    type: 'POST',
+		    url: '<%=request.getContextPath()%>/EmpServlet',
+		    dataType: "json",
+		    data: {
+		    	action: 'selectAllEmpIdNameR',
+		    },
+		    success: function(data) {
+		    },
+		})).done(function (data){
+			var receiver = document.getElementById("receiver");
+			receiver.addEventListener("change", function(e) {
+				chatWebSocket = new WebSocket(endPointURL);
+				var optionName = e.target.value;
+				var selectId = data.map[optionName];
+				
+				chatWebSocket.onopen = function(event) {
+					console.log("ChatListenerConnect Success!");
+				};
+				chatWebSocket.onmessage = function(event) {
+					var jsonObj = JSON.parse(event.data);
+					if ("open" === jsonObj.type && chatWebSocket.readyState === 1) {
+						
+						var jsonObj = {
+								"type" : "history",
+								"sender" : self,
+								"receiver" : selectId,
+								"message" : "",
+								"time" : ""
+							};
+						chatWebSocket.send(JSON.stringify(jsonObj));
+					} else if ("history" === jsonObj.type) {
+						messagesArea.innerHTML = '';
+						var ul = document.createElement('ul');
+						ul.id = "area";
+						messagesArea.appendChild(ul);
+						
+						// 這行的jsonObj.message是從redis撈出跟好友的歷史訊息，再parse成JSON格式處理
+						var messages = JSON.parse(jsonObj.message);
+						for (var i = 0; i < messages.length; i++) {
+							var historyData = JSON.parse(messages[i]);
+							var showMsg = historyData.message;
+							var datetime = historyData.time;
+							var li = document.createElement('li');
+							var div = document.createElement('div');
+							var span = document.createElement('span');
+							var newContent = historyData.sender === self ? document.createTextNode('我: ' + showMsg) : document.createTextNode(optionName + ': ' + showMsg);
+							// 根據發送者是自己還是對方來給予不同的class名, 以達到訊息左右區分
+							historyData.sender === self ? li.className += 'me messages' : li.className += 'friend messages';
+							historyData.sender === self ? div.className += 'me message last' : div.className += 'friend message last';
+							ul.appendChild(li);
+							li.appendChild(div);
+							div.appendChild(newContent);
+							li.appendChild(span);
+							span.innerHTML = datetime;
+						}
+						messagesArea.scrollTop = messagesArea.scrollHeight;
+						
+					} else if ("chat" === jsonObj.type && selectId === jsonObj.sender && self === jsonObj.receiver) {
+						var currentdate = new Date(); 
+						var datetime = currentdate.getHours()  + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
 						var li = document.createElement('li');
 						var div = document.createElement('div');
-						var newContent = historyData.sender === self ? document.createTextNode('我: ' + showMsg) : document.createTextNode(historyData.sender + ': ' + showMsg);
-						// 根據發送者是自己還是對方來給予不同的class名, 以達到訊息左右區分
-						historyData.sender === self ? li.className += 'me messages' : li.className += 'friend messages';
-						historyData.sender === self ? div.className += 'me message last' : div.className += 'friend message last';
-						ul.appendChild(li);
+						var span = document.createElement('span');
+						div.className  = "message last";
+						var newContent = jsonObj.sender === self ? document.createTextNode('我: ' + jsonObj.message) : document.createTextNode(optionName + ': ' + jsonObj.message);
+						jsonObj.sender === self ? li.className += 'me messages' : li.className += 'friend messages';
+						document.getElementById("area").appendChild(li);
 						li.appendChild(div);
 						div.appendChild(newContent);
-						console.log("FUCKKK44")
+						li.appendChild(span);
+						span.innerHTML = datetime;
+						messagesArea.scrollTop = messagesArea.scrollHeight;
+						
+				        
+						
+					} else if ("close" === jsonObj.type) {
+						console.log("FUCKKKoff")
 					}
-					messagesArea.scrollTop = messagesArea.scrollHeight;
-				} else if ("chat" === jsonObj.type) {
-					console.log("FUCKKK55")
-					var li = document.createElement('li');
-					var div = document.createElement('div');
-					div.className  = "message last";
-					var newContent = jsonObj.sender === self ? document.createTextNode('我: ' + jsonObj.message) : document.createTextNode(jsonObj.sender + ': ' + jsonObj.message);
-					jsonObj.sender === self ? li.className += 'me messages' : li.className += 'friend messages';
-					console.log(li);
-					document.getElementById("area").appendChild(li);
-					li.appendChild(div);
-					div.appendChild(newContent);
-					messagesArea.scrollTop = messagesArea.scrollHeight;
-					console.log("FUCKKK66")
-					
-					let messh6 = document.getElementById('messh6');
-					let friend = document.getElementById("receiver").value
-					
-					let list_html = `
-			            <div class="dropdown-divider"></div>
-			            <a class="dropdown-item" href="#">
-			              <span class="text-success">
-			              <strong>${loginEmp.empAccount}</strong>
-			              </span>
-			              <span class="small float-right text-muted">11:21 AM</span>
-			              <div class="dropdown-message small">${newContent}</div>
-			            </a>
-			            `
-			        $("#messh6").after(list_html);
-					
-					
-				} else if ("close" === jsonObj.type) {
-					console.log("FUCKKKoff")
 				}
-				
-			};
-
-			chatWebSocket.onclose = function(event) {
-				console.log("Disconnected!");
-			};
+					
+				chatWebSocket.onclose = function(event) {
+					console.log("ChatListenerDisconnected!");
+				};
+			});
 		});
 	}
 
@@ -673,6 +649,153 @@ h1.chat {
 	function closeForm() {
 		  document.getElementById("myForm").style.display = "none";
 		}
+	
+	function openChat() {
+		$.when($.ajax({
+		    type: 'POST',
+		    url: '<%=request.getContextPath()%>/EmpServlet',
+		    dataType: "json",
+		    data: {
+		    	action: 'selectAllEmpIdName',
+		    },
+		    success: function(data) {
+		    },
+		})).done(function (data){
+			var receiver = document.getElementById("receiver");
+			
+			  if(sessionStorage.getItem("name_array") === null){
+				  document.getElementById("myForm").style.display = "block";
+			  }else{
+				  document.getElementById("myForm").style.display = "block";
+				  chatListener();
+					$('#receiver > option').each(function() {
+							this.remove();
+					})
+					
+				  var name_array = sessionStorage.getItem("name_array");
+					array = JSON.parse(name_array);
+					array.forEach(function(item){
+						var option = document.createElement("option");
+						option.text = data.map[item];
+						receiver.add(option);
+			  		})
+			  }
+			  
+			  var receiverName = document.getElementById("receiver").value;
+			  console.log('receiverName:'+receiverName);
+			  
+				$.when($.ajax({
+				    type: 'POST',
+				    url: '<%=request.getContextPath()%>/EmpServlet',
+				    dataType: "json",
+				    data: {
+				    	action: 'selectAllEmpIdNameR',
+				    },
+				    success: function(data) {
+				    },
+				})).done(function (data){
+					var friend = data.map[receiverName];
+					console.log('friend:'+friend)
+					chatWebSocket = new WebSocket(endPointURL);
+					chatWebSocket.onopen = function(event) {
+						console.log("ChatConnect Success!");
+					};
+
+					chatWebSocket.onmessage = function(event) {
+						var jsonObj = JSON.parse(event.data);
+						if ("open" === jsonObj.type) {
+							
+							var jsonObj = {
+									"type" : "history",
+									"sender" : self,
+									"receiver" : friend,
+									"message" : "",
+									"time" : ""
+								};
+							chatWebSocket.send(JSON.stringify(jsonObj));
+						} else if ("history" === jsonObj.type) {
+							$.when($.ajax({
+							    type: 'POST',
+							    url: '<%=request.getContextPath()%>/EmpServlet',
+							    dataType: "json",
+							    data: {
+							    	action: 'selectAllEmpIdName',
+							    },
+							    success: function(data) {
+							    },
+							})).done(function (data){
+								messagesArea.innerHTML = '';
+								var ul = document.createElement('ul');
+								ul.id = "area";
+								messagesArea.appendChild(ul);
+								
+								// 這行的jsonObj.message是從redis撈出跟好友的歷史訊息，再parse成JSON格式處理
+								var messages = JSON.parse(jsonObj.message);
+								for (var i = 0; i < messages.length; i++) {
+									var historyData = JSON.parse(messages[i]);
+									console.log('historyData.sender:'+historyData.sender)
+									console.log('data.map[historyData.sender]:'+data.map[historyData.sender])
+									var showMsg = historyData.message;
+									var datetime = historyData.time;
+									var li = document.createElement('li');
+									var div = document.createElement('div');
+									var span = document.createElement('span');
+									var newContent = historyData.sender === self ? document.createTextNode('我: ' + showMsg) : document.createTextNode(data.map[historyData.sender] + ': ' + showMsg);
+									// 根據發送者是自己還是對方來給予不同的class名, 以達到訊息左右區分
+									historyData.sender === self ? li.className += 'me messages' : li.className += 'friend messages';
+									historyData.sender === self ? div.className += 'me message last' : div.className += 'friend message last';
+									ul.appendChild(li);
+									li.appendChild(div);
+									li.appendChild(span);
+									span.innerHTML = datetime;
+									div.appendChild(newContent);
+								}
+								messagesArea.scrollTop = messagesArea.scrollHeight;
+							})
+
+						} else if ("chat" === jsonObj.type && friend === jsonObj.sender && self === jsonObj.receiver) {
+							$.when($.ajax({
+							    type: 'POST',
+							    url: '<%=request.getContextPath()%>/EmpServlet',
+							    dataType: "json",
+							    data: {
+							    	action: 'selectAllEmpIdName',
+							    },
+							    success: function(data) {
+							    },
+							})).done(function (data){
+								var currentdate = new Date(); 
+								var datetime = currentdate.getHours()  + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+								var li = document.createElement('li');
+								var div = document.createElement('div');
+								var span = document.createElement('span');
+								div.className  = "message last";
+								var newContent = jsonObj.sender === self ? document.createTextNode('我: ' + jsonObj.message) : document.createTextNode(data.map[jsonObj.sender] + ': ' + jsonObj.message);
+								jsonObj.sender === self ? li.className += 'me messages' : li.className += 'friend messages';
+								console.log(li);
+								document.getElementById("area").appendChild(li);
+								li.appendChild(div);
+								div.appendChild(newContent);
+								li.appendChild(span);
+								span.innerHTML = datetime;
+								messagesArea.scrollTop = messagesArea.scrollHeight;
+							})
+							
+						} else if ("close" === jsonObj.type) {
+							console.log("FUCKKKoff")
+						}
+						
+					};
+
+					chatWebSocket.onclose = function(event) {
+						console.log("ChatDisconnected!");
+					};
+					
+				})
+			  
+		})
+
+	}
 	
 	
 </script>

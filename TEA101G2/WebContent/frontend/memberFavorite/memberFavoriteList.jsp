@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.member.model.*"%>
-<%@ page import="com.memberfavorite.model.*"%>
+<%@ page import="com.memberFavorite.model.*"%>
 <%@ page import="com.space.model.*"%>
-<%@ page import="com.spacedetail.model.*"%>
-<%@ page import="com.spacephoto.model.*"%>
+<%@ page import="com.spaceDetail.model.*"%>
+<%@ page import="com.spacePhoto.model.*"%>
 <%@ page import="java.util.*"%>
 <% Base64.Encoder encode = Base64.getEncoder();%>
 <%MemberVO userVO = (MemberVO) session.getAttribute("userVO");%>
@@ -107,8 +107,8 @@
 				    pageContext.setAttribute("list",list);
 				%>
 		<jsp:useBean id="spaceSvc" scope="page" class="com.space.model.SpaceService" />
-		<jsp:useBean id="spaceDetailSvc" scope="page" class="com.spacedetail.model.SpaceDetailService" />	
-		<jsp:useBean id="spacePhotoSvc" scope="page" class="com.spacephoto.model.SpacePhotoService" />
+		<jsp:useBean id="spaceDetailSvc" scope="page" class="com.spaceDetail.model.SpaceDetailService" />	
+		<jsp:useBean id="spacePhotoSvc" scope="page" class="com.spacePhoto.model.SpacePhotoService" />
 	
 			
             <div class="wrapper-grid">

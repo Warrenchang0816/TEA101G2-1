@@ -1,8 +1,7 @@
-<%@ page import="sun.misc.BASE64Encoder"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
-<%@ page import="com.spacephoto.model.*"%>
+<%@ page import="com.spacePhoto.model.*"%>
 <%@ page import="com.space.model.*"%>
 
 <%
@@ -134,7 +133,7 @@
 	</tr>
 	<tr>
 		<td>會員ID:</td>
-		<td><input type="TEXT" name="memId" size="45" value="<%=spaceVO.getMemId()%>" /></td>
+		<td><input type="TEXT" name="memId" size="45" value="<%=spaceVO.getMemberId()%>" /></td>
 	</tr>
 	<tr>
 		<td>員工ID:</td>

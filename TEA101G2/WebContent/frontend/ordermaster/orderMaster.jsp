@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
-<%@ page import="com.ordermaster.model.*"%>
+<%@ page import="com.orderMaster.model.*"%>
 
 <%
 	OrderMasterVO orderMasterVO = (OrderMasterVO) request.getAttribute("selectOneOrderMaster");
@@ -32,7 +32,7 @@
 				</form>
 			</li>
 			
-			<jsp:useBean id="orderMasterSvc" scope="page" class="com.ordermaster.model.OrderMasterService" />
+			<jsp:useBean id="orderMasterSvc" scope="page" class="com.orderMaster.model.OrderMasterService" />
 			<li>
 				<FORM METHOD="post" ACTION="<%=request.getContextPath()%>/OrderMasterServlet">
 					<b>選擇訂單編號:</b> 

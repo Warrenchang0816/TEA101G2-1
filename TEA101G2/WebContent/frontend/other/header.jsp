@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.member.model.*"%>
-<%@ page import="com.membercomment.model.*"%>
+<%@ page import="com.memberComment.model.*"%>
 <%@ page import="java.util.*"%>
 <%
 	Base64.Encoder encode = Base64.getEncoder();
@@ -10,6 +10,37 @@
 <%
 	MemberVO userVO = (MemberVO) session.getAttribute("userVO");
 %>
+
+<style>
+
+/* Button used to open the chat form - fixed at the bottom of the page */
+.open-button {
+  background-color: #555;
+  color: white;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed;
+  bottom: 10px;
+  right: 80px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.open-online {
+  background-color: #555;
+  color: white;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed;
+  bottom: 10px;
+  right: 400px;
+  width: 100px;
+  height: 60px;
+}
+</style>
 
 <c:choose>
 	<c:when test="${userVO != null}">
@@ -105,3 +136,15 @@
 		</header>
 	</c:otherwise>
 </c:choose>
+
+<%@ include file="/frontend/other/memberChat.jsp" %>
+<%@ include file="/frontend/other/memberOnlineList.jsp" %>
+
+<button class="open-button" onclick="openChat();" style="z-index:10">Chat</button>
+<button class="open-online" style="z-index:10" onclick="openOnlineList()">OnlineList</button>
+
+
+
+
+
+

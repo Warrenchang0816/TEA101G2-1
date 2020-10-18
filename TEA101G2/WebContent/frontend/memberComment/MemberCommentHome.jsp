@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
-<%@ page import="com.membercomment.model.*"%>
+<%@ page import="com.memberComment.model.*"%>
 
 <%
 	MemberCommentVO memberCommentVO = (MemberCommentVO) request.getAttribute("memberCommentVO");
@@ -34,7 +34,7 @@
 				</form>
 			</li>
 			
-			<jsp:useBean id="memberCommentSvc" scope="page" class="com.membercomment.model.MemberCommentService" />
+			<jsp:useBean id="memberCommentSvc" scope="page" class="com.memberComment.model.MemberCommentService" />
 			<li>
 				<form method="post" action="<%=request.getContextPath()%>/MemberCommentServlet.do">
 					<b>選擇會員評論編號:</b> 
