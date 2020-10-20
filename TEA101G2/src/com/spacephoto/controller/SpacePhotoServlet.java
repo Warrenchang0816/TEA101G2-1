@@ -1,14 +1,12 @@
 package com.spacePhoto.controller;
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.servlet.*;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import java.io.IOException;
-import java.io.InputStream;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -19,6 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import com.space.model.SpaceService;
+import com.space.model.SpaceVO;
+import com.spaceDetail.model.SpaceDetailService;
+import com.spaceDetail.model.SpaceDetailVO;
 import com.spacePhoto.model.*;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 5 * 1024 * 1024, maxRequestSize = 5 * 5 * 1024 * 1024)
@@ -46,12 +48,6 @@ public class SpacePhotoServlet extends HttpServlet {
 					errorMsgs.add("請輸入場地圖片ID");
 				}
 				// Send the use back to the form, if there were errors
-				if (!errorMsgs.isEmpty()) {
-					RequestDispatcher failureView = req.getRequestDispatcher("/frontend/spacephoto/spacePhotoHome.jsp");
-					failureView.forward(req, res);
-					return;// 程式中斷
-				}
-
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req.getRequestDispatcher("/frontend/spacephoto/spacePhotoHome.jsp");
 					failureView.forward(req, res);
@@ -113,7 +109,49 @@ public class SpacePhotoServlet extends HttpServlet {
 				failureView.forward(req, res);
 			}
 		}
-
+		/***************************** 場主按下"編輯場地照片"按鈕後執行 *****************************/
+		if ("listAllSpacePhotoBySpaceForEdit".equals(action)) {
+			Queue<String> errorMessages = new LinkedList<String>();
+			req.setAttribute("errorMsgs", errorMessages);
+			
+			try {
+				/********************************* 設定spaceId **************************************/
+				String spaceId = req.getParameter("spaceId");
+				if (spaceId == null || (spaceId.trim()).length() == 0) {
+					errorMessages.add("請輸入場地ID");
+				}
+				// Send the use back to the form, if there were errors
+				if (!errorMessages.isEmpty()) {
+					RequestDispatcher failureView = req.getRequestDispatcher("/frontend/space/spaceHome.jsp");
+					failureView.forward(req, res);
+					return;// 程式中斷
+				}
+//				/************************************* 開始撈資料 *************************************************/
+				SpaceService spaceSvc = new SpaceService();
+				SpaceVO spaceVO = spaceSvc.selectOneSpace(spaceId);
+				if (spaceVO == null) {
+					errorMessages.add("查無資料");
+				}
+				// Send the use back to the form, if there were errors
+				if (!errorMessages.isEmpty()) {
+					RequestDispatcher failureView = req.getRequestDispatcher("/frontend/spacedetail/spaceDetailHome");
+					failureView.forward(req, res);
+					return;// 程式中斷
+				}
+				/*************************** 查詢完成,準備轉交(Send the Success view) ********************************/
+				req.setAttribute("spaceVO", spaceVO);
+				String url = "/frontend/spacephoto/listAllSpacePhotoBySpaceForEdit.jsp";
+				RequestDispatcher sucessVeiw = req.getRequestDispatcher(url);
+				sucessVeiw.forward(req, res);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				errorMessages.add(e.getMessage());
+				RequestDispatcher exceptionView = req.getRequestDispatcher("/frontend/error.jsp");
+				exceptionView.forward(req, res);
+			}
+		}
+		
 		if ("update".equals(action)) { 
 			List<String> errorMessages = new LinkedList<String>();
 			// Store this set in the request scope, in case we need to
@@ -187,23 +225,17 @@ public class SpacePhotoServlet extends HttpServlet {
 
 			try {
 				/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 **********************/
-//				String spacePhotoId = new String(req.getParameter("spacePhotoId").trim());
-//				if (spacePhotoId == null || spacePhotoId.trim().length() == 0) {
-//					errorMessages.add("場地圖片ID請勿空白");
-//				}
-				
 				String spaceId = req.getParameter("spaceId");
+				
 				if (spaceId == null || spaceId.trim().length() == 0) {
 					errorMessages.add("場地ID請勿空白");
 				}
-
-//				新增一個含有照片資料的spacePhoto
+				
 				byte[] spacePhoto = null;
-				Part part = req.getPart("spacePhoto");
-				InputStream in = part.getInputStream();
-				String filename = getFileNameFromPart(part);
-//				若無上傳照片則塞入預設照片
-				if(filename == null || filename.isEmpty()) {
+				List<SpacePhotoVO> spacePhotoFileList = new ArrayList<SpacePhotoVO>();
+				Part partCheck = req.getPart("spacePhoto");
+				String filename = getFileNameFromPart(partCheck);
+				if (filename == null || filename.isEmpty()) {
 					File file = new File(getServletContext().getRealPath("/") + "/frontend/spacephoto/images/tomcat.png");
 					FileInputStream fis = new FileInputStream(file);
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();  
@@ -216,31 +248,92 @@ public class SpacePhotoServlet extends HttpServlet {
 					baos.close();
 					fis.close();
 				}else {
-					spacePhoto = new byte[in.available()];
-					in.read(spacePhoto);
-					in.close();
+					Collection<Part> parts = req.getParts();
+					List<Part> allPartlist = new ArrayList<Part>();
+					Part[] allPartArray = parts.toArray(new Part[parts.size()]);
+					for(Part p: allPartArray) {
+//						System.out.println("allPartArrayname: " + p.getName());
+//						System.out.println("allPartArraysubmittedFileName: " + p.getSubmittedFileName());
+						allPartlist.add(p);
+					}
+					
+					List<Part> fileList = allPartlist.stream().filter(ap -> ap.getSubmittedFileName() != null).collect(Collectors.toList());
+					
+					for(Part file: fileList) {
+//						System.out.println("fileListname: " + file.getName());
+//						System.out.println("fileListsubmittedFileName: " + file.getSubmittedFileName());
+						
+						InputStream in = null;
+						in = file.getInputStream();
+						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						byte[] buffer = new byte[8192];
+						int i;
+						while ((i = in.read(buffer)) != -1) {
+							baos.write(buffer, 0, i);
+						}
+						
+						byte[] photofile = baos.toByteArray();
+						SpacePhotoVO sp = new SpacePhotoVO();
+						sp.setSpaceId(spaceId);
+						sp.setSpacePhoto(photofile);
+						spacePhotoFileList.add(sp);
+						baos.close();
+						in.close();
+					}
 				}
+
+//				新增一個含有照片資料的spacePhoto
+//				byte[] spacePhoto = null;
+//				Part part = req.getPart("spacePhoto");
+//				InputStream in = part.getInputStream();
+//				String filename = getFileNameFromPart(part);
+////				若無上傳照片則塞入預設照片
+//				if(filename == null || filename.isEmpty()) {
+//					File file = new File(getServletContext().getRealPath("/") + "/frontend/spacephoto/images/tomcat.png");
+//					FileInputStream fis = new FileInputStream(file);
+//					ByteArrayOutputStream baos = new ByteArrayOutputStream();  
+//					byte[] buffer = new byte[8192];
+//					int i;
+//					while ((i = fis.read(buffer)) != -1) {
+//						baos.write(buffer, 0, i);
+//					}
+//					spacePhoto = baos.toByteArray();
+//					baos.close();
+//					fis.close();
+//				}else {
+//					spacePhoto = new byte[in.available()];
+//					in.read(spacePhoto);
+//					in.close();
+//				}
 				
-				SpacePhotoVO spacePhotoVO = new SpacePhotoVO();
-//				spacePhotoVO.setSpacePhotoId(spacePhotoId);
-				spacePhotoVO.setSpaceId(spaceId);
-				spacePhotoVO.setSpacePhoto(spacePhoto);
+//				SpacePhotoVO spacePhotoVO = new SpacePhotoVO();
+//				spacePhotoVO.setSpaceId(spaceId);
+//				spacePhotoVO.setSpacePhoto(spacePhoto);
+				
 
 				
 //				 Send the use back to the form, if there were errors
-				if (!errorMessages.isEmpty()) {
-					req.setAttribute("spacePhotoVO", spacePhotoVO);
-					RequestDispatcher failureView = req.getRequestDispatcher("/spacephoto/updateSpacePhoto.jsp");
-					failureView.forward(req, res);
-					return; // 程式中斷
-				}
+//				if (!errorMessages.isEmpty()) {
+//					req.setAttribute("spacePhotoVO", spacePhotoVO);
+//					RequestDispatcher failureView = req.getRequestDispatcher("/spacephoto/updateSpacePhoto.jsp");
+//					failureView.forward(req, res);
+//					return; // 程式中斷
+//				}
 				/*************************** 2.開始新增資料 ***************************************/
-				SpacePhotoService spacePhotoSvc = new SpacePhotoService();
-				spacePhotoVO = spacePhotoSvc.addSpacePhoto(spacePhotoVO);
-				System.out.println(spacePhotoVO);
+//				SpacePhotoService spacePhotoSvc = new SpacePhotoService();
+//				spacePhotoVO = spacePhotoSvc.addSpacePhoto(spacePhotoVO);
 				
+				SpacePhotoService spacePhotoSvc = new SpacePhotoService();
+				for(SpacePhotoVO spacePhotoVO: spacePhotoFileList) {
+					spacePhotoSvc.addSpacePhoto(spacePhotoVO);
+				}
+				/***************************** 開始新增SpaceVO資料，後續頁面要接************************************/
+				SpaceService spaceSvc = new SpaceService();
+				SpaceVO spaceVO = new SpaceVO();
+				spaceVO = spaceSvc.selectOneSpace(spaceId);
 				/*************************** 3.新增完成,準備轉交(Send the Success view) ***********/
-				String url = "/frontend/spacephoto/listAllSpacePhoto.jsp";
+				req.setAttribute("spaceVO", spaceVO);
+				String url = "/frontend/space/listAllSpaceForEdit.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); 
 				successView.forward(req, res);
 
@@ -248,7 +341,7 @@ public class SpacePhotoServlet extends HttpServlet {
 			} catch (Exception e) {
 				e.printStackTrace();
 				errorMessages.add(e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/frontend/spacephoto/addSpacePhoto.jsp");
+				RequestDispatcher failureView = req.getRequestDispatcher("/frontend/spacephoto/listAllSpacePhotoBySpaceForEdit.jsp");
 				failureView.forward(req, res);
 			}
 		}
@@ -269,7 +362,7 @@ public class SpacePhotoServlet extends HttpServlet {
 				spacePhotoSvc.deleteSpacePhoto(spacePhotoId);
 
 				/*************************** 3.刪除完成,準備轉交(Send the Success view) ***********/
-				String url = "/frontend/spacephoto/listAllSpacePhoto.jsp";
+				String url = "/frontend/space/listAllSpaceForEdit.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url);// 刪除成功後,轉交回送出刪除的來源網頁
 				successView.forward(req, res);
 
