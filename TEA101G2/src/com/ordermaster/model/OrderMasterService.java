@@ -5,10 +5,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.orderDetail.model.*;
+import com.spaceDetail.model.*;
+import com.spacePhoto.model.*;
 
 public class OrderMasterService {
 	
 	private OrderMasterDAOInterface dao;
+	private OrderDetailDAO oddao;
+	private SpaceDetailDAO sddao;
 	
 	public OrderMasterService() {
 		dao = new OrderMasterDAO();
@@ -41,6 +45,15 @@ public class OrderMasterService {
 	
 	public List<OrderMasterVO> selectAllOrderMaster() {
 		return dao.selectAll();
+	}
+	
+	//超長遠征取SpacePhotoId
+	public String runforSPId(String orderMasterId) {
+		OrderMasterVO omVO = dao.selectOne(orderMasterId);
+		System.out.println(omVO.getOrderMasterId());
+		String spaceDetailId = oddao.selectOneSPId(omVO.getOrderMasterId());
+		String spaceId = sddao.selectOneSpaceId(spaceDetailId);
+		return spaceId;
 	}
 	
 //	public List<OrderMasterVO> selectAllOrderMasterByMember(String memberId) {

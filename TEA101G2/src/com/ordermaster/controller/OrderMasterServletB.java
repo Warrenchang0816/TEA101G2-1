@@ -261,7 +261,6 @@ public class OrderMasterServletB extends HttpServlet {
 					addMessage.setFormListType("message");
 					addMessage.setFormListTitle("訂單["+orderMasterId+"] 退費完成");
 					addMessage.setFormListContext("親愛的會員"+memberName+"，您好<br />您日前申請的退費已完成，感謝您的耐心等候，有任何問題都可以聯絡我們。<br />訂單編號: " + orderMasterId + "，預訂日期: " + OrderMaster.getOrderCreateDate());
-					addMessage.setFormListFile(formListFile);
 					addMessage.setFormListStatus("M");
 					addMessage.setFormListSolu(memberId);
 				}else if ("T".equals(OrderMaster.getOrderStatus())) {
@@ -279,7 +278,6 @@ public class OrderMasterServletB extends HttpServlet {
 					addMessage.setFormListType("message");
 					addMessage.setFormListTitle("訂單["+orderMasterId+"] 交易取消通知");
 					addMessage.setFormListContext("親愛的會員"+memberName+"，您好<br />您日前成立的訂單已超過付款期限，有任何問題都可以聯絡我們，感謝。<br />訂單編號: " + orderMasterId + "，預訂日期: " + OrderMaster.getOrderCreateDate());
-					addMessage.setFormListFile(formListFile);
 					addMessage.setFormListStatus("M");
 					addMessage.setFormListSolu(memberId);
 				}

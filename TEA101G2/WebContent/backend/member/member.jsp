@@ -59,7 +59,7 @@
           <div class="card dashboard text-white bg-warning o-hidden h-100">
             <div class="card-body">
               <div class="card-body-icon">
-                <i class="fa fa-fw fa-star"></i>
+                <img alt="rocket" width="60" src="https://www.flaticon.com/svg/static/icons/svg/3069/3069224.svg" />
               </div>
 			<div class="mr-5"><h5>搜尋會員</h5></div>
             </div>
@@ -76,7 +76,7 @@
           <div class="card dashboard text-white bg-warning o-hidden h-100">
             <div class="card-body">
               <div class="card-body-icon">
-                <i class="fa fa-fw fa-star"></i>
+              <img alt="rocket" width="60" src="https://www.flaticon.com/svg/static/icons/svg/3069/3069224.svg" />
               </div>
 			<div class="mr-5"><h5>停權會員</h5></div>
             </div>
@@ -90,14 +90,6 @@
         </div>
 	</div>
 		
-		<!-- /cards -->
-		<h2></h2>
-		<div class="box_general padding_bottom">
-			<div class="header_box version_2">
-				<h2><i class="fa fa-bar-chart"></i>Statistic</h2>
-			</div>
-		 <canvas id="myAreaChart" width="100%" height="30" style="margin:45px 0 15px 0;"></canvas>
-		</div>
 		
 	  </div>
 	  <!-- /.container-fluid-->

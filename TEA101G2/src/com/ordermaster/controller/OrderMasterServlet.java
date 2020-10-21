@@ -36,7 +36,6 @@ public class OrderMasterServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
 		String action = req.getParameter("action");
-		
 
 		
 		if ("addOrderMaster".equals(action)) {
@@ -96,8 +95,6 @@ public class OrderMasterServlet extends HttpServlet {
 			req.setAttribute("errorMsgs", errorMsgs);
 			
 			try {
-//				String memberId = req.getParameter("memberId").trim();
-//				if(memberId == null || memberId.isEmpty()) errorMsgs.add("會員編號: 請勿空白");
 				
 				java.sql.Date orderCreateDate = null;
 				try {
@@ -132,17 +129,15 @@ public class OrderMasterServlet extends HttpServlet {
 				rentEndTimelist = req.getParameterValues("rentEndTime");
 				System.out.println(rentEndTimelist);
 				
-				String[] spaceDetailChargelist = null;
-				spaceDetailChargelist = req.getParameterValues("spaceDetailCharge");
-				System.out.println(spaceDetailChargelist);
-				
+				String[] spaceDetailChargelistStr = null;
+				spaceDetailChargelistStr = req.getParameterValues("spaceDetailCharge");
 				Integer rentCharge = 0;
 				
 				
 				//撈出資料建立OrderDetailVO，並將OrderMaster總金額修改成訂單總金額
 				List<OrderDetailVO> odlist = new ArrayList<OrderDetailVO>();
 				OrderDetailService orderDetailSvc = new OrderDetailService();
-				SpaceDetailServiceB spaceDetailSvc = new SpaceDetailServiceB();
+				SpaceDetailService spaceDetailSvc = new SpaceDetailService();
 				
 				
 				for (int i = 0; i < rentStartTimelist.length; i++) {
@@ -192,7 +187,7 @@ public class OrderMasterServlet extends HttpServlet {
 						System.out.println("第"+ (i + 1) +"筆訂單，預訂結束時間：" + rentEndTimelist[i]);
 						odlist.add(orderDetailVO);
 						//將訂單金額新增至rentCharge
-						rentCharge += (Integer.parseInt(spaceDetailChargelist[i]) * (int)(rentEndTimeLong-rentStartTimeLong)/1000/60/60);
+						rentCharge += (Integer.parseInt(spaceDetailChargelistStr[i]) * ((int)(rentEndTimeLong-rentStartTimeLong)/1000/60/60));
 					}
 				}
 				
@@ -204,16 +199,17 @@ public class OrderMasterServlet extends HttpServlet {
 					return;// 程式中斷
 				}
 				
-				System.out.println("訂單金額共"+rentCharge+"元，設定至OrderMaster的OrderAmount");
+				System.out.println("訂單金額共" + rentCharge + "元，設定至OrderMaster的OrderAmount");
 				addOrderMaster.setOrderAmount(rentCharge);
 				System.out.println("資料無誤，開始新增資料");
 				OrderMasterService orderMasterServ = new OrderMasterService();
 				orderMasterServ.insertwithOrderDetail(addOrderMaster, odlist);
 				
 				/*************************** 3.查詢完成,準備轉交(Send the Success view) ********************************/
-				req.setAttribute("memberId", addOrderMaster.getMemberId());
-				req.setAttribute("selectOneOrderMaster", addOrderMaster);
-				String url = "/frontend/ordermaster/selectOneOrderMaster.jsp";
+				
+				req.setAttribute("addOrderMaster", addOrderMaster);
+				req.setAttribute("odlist", odlist);
+				String url = "/frontend/ordermaster/orderCart.jsp";
 				RequestDispatcher sucessVeiw = req.getRequestDispatcher(url);
 				sucessVeiw.forward(req, res);
 				

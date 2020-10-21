@@ -126,7 +126,7 @@ Base64.Encoder encode = Base64.getEncoder();
 								<label>表單圖片</label>
 								<div style="height:300px;" class="form-control" >
 								<%--application.getRealPath("/backend/img/BlobTest3.jpg") --%>
-									<img src="<%=(formListVO.getFormListFile() == null)? "" : "data:image/png;base64," + encode.encodeToString(formListVO.getFormListFile())%>" id="perview"/>
+									<%--<img src="<%=(formListVO.getFormListFile() == null)? "" : "data:image/png;base64," + encode.encodeToString(formListVO.getFormListFile())%>" id="perview"/>--%>
 								</div>
 							</div>
 						</div>

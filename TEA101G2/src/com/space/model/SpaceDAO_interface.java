@@ -8,6 +8,6 @@ public interface SpaceDAO_interface {
 		public void update(SpaceVO spaceVO);
 		public SpaceVO selectOne(String spaceId);
 		public List<SpaceVO> getAll();
-		public List<SpaceVO> searchSpace(String spaceAddress, String spaceType, String spaceContain);
-
+		public List<SpaceVO> searchSpace(String subQuery, String spaceAddress, String spaceType, String spaceContain);
+		public void updateSpaceStatus(SpaceVO spaceVO);
 }

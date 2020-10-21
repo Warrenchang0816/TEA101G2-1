@@ -112,6 +112,7 @@
 					  <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
 					</svg>
         		</button>
+        		<%-- 
 			    <input type="hidden" name="empId" value="${empVO.empId}">
 			    <input type="hidden" name="action"	value="backend_SelectOneEmp"></FORM>
 			     <button type="button" class="btn btn-link" id="messbtn" value="${empVO.empId}" onclick="clickToChat(this)">
@@ -120,6 +121,7 @@
 					  <path fill-rule="evenodd" d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8zm0 2.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5z"/>
 					</svg>
         		</button>
+        		--%>
 			    
 		</td>
 		<td>${empVO.empName}</td>

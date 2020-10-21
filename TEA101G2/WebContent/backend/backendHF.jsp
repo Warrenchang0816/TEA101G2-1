@@ -92,12 +92,37 @@ pageContext.setAttribute("mailListNew",mailListNew);
   opacity: 0.8;
   position: fixed;
   bottom: 10px;
-  right: 400px;
+  right: 70%;
   width: 100px;
   height: 60px;
 }
 </style>
-	
+    <style>
+        a.box_topic i {
+            color: gray;
+            background-color:#272727;
+            background-color: white;
+        }
+        #unread {
+		    background-color: #dc3545;
+		}
+		#unread {
+		    background-color: #dc3545;
+		    -webkit-border-radius: 50px;
+		    -moz-border-radius: 50px;
+		    -ms-border-radius: 50px;
+		    border-radius: 50px;
+		    font-size: 12px;
+		    font-size: 0.75rem;
+		    color: #fff;
+		    font-style: normal;
+		    padding: 3px 12px 2px 12px;
+		    margin-left: 3px;
+		    position: relative;
+		    top: -3px;
+		    line-height: 1;
+		}
+    </style>
 </head>
 
 
@@ -150,22 +175,24 @@ pageContext.setAttribute("mailListNew",mailListNew);
         
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My profile">
           <a class="nav-link" href="<%=request.getContextPath()%>/backend/member/member.jsp">
-            <i class="fa fa-fw fa-user"></i>
+            <img alt="rocket" width=30 src="https://www.flaticon.com/svg/static/icons/svg/2298/2298538.svg" />
             <span class="nav-link-text">管理會員</span>
           </a>
         </li>
         
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My profile">
           <a class="nav-link" href="<%=request.getContextPath()%>/backend/space/space.jsp">
-            <i class="fa fa-fw fa-user"></i>
+            <img alt="rocket" width=25 src="https://www.flaticon.com/svg/static/icons/svg/3616/3616161.svg" />
             <span class="nav-link-text">管理場地</span>
            	<span style="color:red">${HFSpaceListNew.isEmpty()? "" : "New!!"}</span>
           </a>
         </li>
         
+        
+        
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My profile">
           <a class="nav-link" href="<%=request.getContextPath()%>/backend/orderMaster/orderMaster.jsp">
-            <i class="fa fa-fw fa-user"></i>
+            <img alt="rocket" width=30 src="https://www.flaticon.com/svg/static/icons/svg/616/616729.svg" />
             <span class="nav-link-text">管理訂單</span>
             <span style="color:red">${orderMasterlistT.isEmpty()? "" : "New!!"}</span>
           </a>
@@ -257,7 +284,7 @@ pageContext.setAttribute("mailListNew",mailListNew);
     <footer class="sticky-footer">
       <div class="container">
         <div class="text-center">
-          <small>Copyright © PANAGEA 2018</small>
+          <small>Copyright © BIGZOO 2020</small>
         </div>
       </div>
     </footer>

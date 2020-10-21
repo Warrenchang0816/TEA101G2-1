@@ -64,7 +64,7 @@ Base64.Encoder encode = Base64.getEncoder();
           <div class="card dashboard text-white bg-primary o-hidden h-100">
             <div class="card-body">
               <div class="card-body-icon">
-                <i class="fa fa-fw fa-envelope-open"></i>
+                <img alt="rocket" width="60" src="https://www.flaticon.com/svg/static/icons/svg/3069/3069275.svg" />
               </div>
               <div class="mr-5"><h5>搜尋場地</h5></div>
             </div>
@@ -81,7 +81,7 @@ Base64.Encoder encode = Base64.getEncoder();
           <div class="card dashboard text-white bg-primary o-hidden h-100">
             <div class="card-body">
               <div class="card-body-icon">
-                <i class="fa fa-fw fa-envelope-open"></i>
+              <img alt="rocket" width="60" src="https://www.flaticon.com/svg/static/icons/svg/3069/3069275.svg" />
               </div>
               <div class="mr-5"><h5>上架的場地</h5></div>
             </div>
@@ -98,7 +98,7 @@ Base64.Encoder encode = Base64.getEncoder();
           <div class="card dashboard text-white bg-primary o-hidden h-100">
             <div class="card-body">
               <div class="card-body-icon">
-                <i class="fa fa-fw fa-envelope-open"></i>
+                <img alt="rocket" width="60" src="https://www.flaticon.com/svg/static/icons/svg/3069/3069275.svg" />
               </div>
               <div class="mr-5"><h5>未上架場地</h5></div>
             </div>
@@ -129,14 +129,6 @@ Base64.Encoder encode = Base64.getEncoder();
         </div>
         
 	</div>
-		<!-- /cards -->
-		<h2></h2>
-		<div class="box_general padding_bottom">
-			<div class="header_box version_2">
-				<h2><i class="fa fa-bar-chart"></i>Statistic</h2>
-			</div>
-		 <canvas id="myAreaChart" width="100%" height="30" style="margin:45px 0 15px 0;"></canvas>
-		</div>
 	  </div>
 	  <!-- /.container-fluid-->
    	</div>

@@ -96,9 +96,9 @@
                     <textarea id="compose-textarea" class="form-control" style="height: 300px" name="formListContext" value="<%= (mail == null)? "" : mail.getFormListContext()%>"></textarea>
                 </div>
                 <div class="form-group">
-                  <div class="btn btn-default btn-file">
+                  <div class="btn btn-default btn-file" id="btn-file">
                     <i class="fas fa-paperclip"></i> 附件
-                    <input type="file" name="formListFile">
+                    <input type="file" name="formListFile" id="mailFile" multiple="multiple">
                   </div>
                   <p class="help-block">Max. 32MB</p>
                 </div>
@@ -136,6 +136,18 @@
     
     <script src="<%=request.getContextPath()%>/backend/js/adminlte.min.js"></script>
     
+<script>
+      $("#mailFile").on("change",function() {
+    	  $("img.preview").remove();
+		for (let i = 0; i < this.files.length; i++) {
+			let reader = new FileReader();
+			reader.readAsDataURL(this.files[i]);
+			reader.addEventListener("load", function() {
+				$("#btn-file").append(`<img src="\${reader.result}" class ="preview" id="preview" style="max-height:100px;">&nbsp;&nbsp;&nbsp;`);
+			});
+		};
+	});
+</script>
 <script>
 var MyPoint2 = "/OnlineWS/${loginEmp.empId}";
 var host2 = window.location.host;

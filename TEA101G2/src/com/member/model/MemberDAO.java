@@ -8,11 +8,28 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 public class MemberDAO implements MemberDAO_interface {
-	private static final String URL = "jdbc:oracle:thin:@localhost:1521:xe";
-	private static final String USER = "TEA101G2";
-	private static final String PASSWORD = "TEA101G2";
-	private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
+	
+	private static DataSource ds = null;
+	static {
+		try {
+			Context ctx = new InitialContext();
+			ds = (DataSource)ctx.lookup("java:comp/env/jdbc/TEA101G2");
+		}
+		catch(NamingException e){
+			e.printStackTrace();
+		}
+	}
+	
+//	private static final String URL = "jdbc:oracle:thin:@localhost:1521:xe";
+//	private static final String USER = "TEA101G2";
+//	private static final String PASSWORD = "123456";
+//	private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
 	private static final String INSERT = "INSERT INTO MEMBER ( MEMBER_ID, MEMBER_ACCOUNT, MEMBER_PASSWORD, MEMBER_NAME, MEMBER_NICKNAME, MEMBER_EMAIL, MEMBER_PHOTO, MEMBER_PHONE, MEMBER_ADDRESS, MEMBER_BIRTH, MEMBER_SEX, MEMBER_COUNTRY, MEMBER_SIGNUP_DATE, MEMBER_AUTH, MEMBER_STATUS, MEMBER_ONLINE ) VALUES ( 'MEM' || lpad(MEMBER_ID_SEQ.NEXTVAL, 5, '0' ),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	private static final String GET_ALL = "SELECT * FROM MEMBER";
 	private static final String GET_ONE = "SELECT * FROM MEMBER WHERE MEMBER_ID = ?";
@@ -22,15 +39,18 @@ public class MemberDAO implements MemberDAO_interface {
 			+ "MEMBER_EMAIL=?, MEMBER_PHOTO=?, MEMBER_PHONE=?, MEMBER_ADDRESS=?, MEMBER_BIRTH=?, MEMBER_SEX=?, MEMBER_COUNTRY=?, "
 			+ "MEMBER_SIGNUP_DATE=?, MEMBER_AUTH=?,MEMBER_STATUS=?,MEMBER_ONLINE=? WHERE MEMBER_ID = ?";
 	private static final String USER_LOGIN = "SELECT * FROM MEMBER WHERE MEMBER_ACCOUNT = ? and MEMBER_PASSWORD=?";
-	
+	//IPO場地評價用--根據MEMBER_ID取MEMBER_NICKNAME
+		private static final String GET_ONE_NAME = "SELECT MEMBER_NICKNAME FROM MEMBER WHERE MEMBER_ID = ?";
+		
 	@Override
 	public void insert(MemberVO memberVO) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 
 		try {
-			Class.forName(DRIVER);
-			con = DriverManager.getConnection(URL, USER, PASSWORD);
+//			Class.forName(DRIVER);
+//			con = DriverManager.getConnection(URL, USER, PASSWORD);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(INSERT);
 
 			pstmt.setString(1, memberVO.getMemberAccount());
@@ -51,8 +71,6 @@ public class MemberDAO implements MemberDAO_interface {
 			pstmt.executeUpdate();
 			System.out.println("success");
 
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -79,8 +97,9 @@ public class MemberDAO implements MemberDAO_interface {
 		PreparedStatement ptmt = null;
 		
 		try {
-			Class.forName(DRIVER);
-			con = DriverManager.getConnection(URL, USER, PASSWORD);
+//			Class.forName(DRIVER);
+//			con = DriverManager.getConnection(URL, USER, PASSWORD);
+			con = ds.getConnection();
 			ptmt = con.prepareStatement(UPDATE);
 			
 			ptmt.setString(1, memberVO.getMemberAccount());
@@ -102,8 +121,6 @@ public class MemberDAO implements MemberDAO_interface {
 
 			ptmt.executeUpdate();
 			
-		}catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
@@ -130,14 +147,13 @@ public class MemberDAO implements MemberDAO_interface {
 		PreparedStatement pstmt = null;
 
 		try {
-			Class.forName(DRIVER);
-			con = DriverManager.getConnection(URL, USER, PASSWORD);
+//			Class.forName(DRIVER);
+//			con = DriverManager.getConnection(URL, USER, PASSWORD);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(DELETE);
 			pstmt.setString(1, memberId);
 			pstmt.executeUpdate();
 			
-		}catch (ClassNotFoundException e) {
-				e.printStackTrace();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}finally {
@@ -166,8 +182,9 @@ public class MemberDAO implements MemberDAO_interface {
 		ResultSet rs = null;
 
 		try {
-			Class.forName(DRIVER);
-			con = DriverManager.getConnection(URL, USER, PASSWORD);
+//			Class.forName(DRIVER);
+//			con = DriverManager.getConnection(URL, USER, PASSWORD);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ONE);
 
 			pstmt.setString(1, memberId);
@@ -193,8 +210,6 @@ public class MemberDAO implements MemberDAO_interface {
 				memberVO.setMemberOnline(rs.getString("MEMBER_ONLINE"));
 			}
 
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -234,8 +249,9 @@ public class MemberDAO implements MemberDAO_interface {
 		List<MemberVO> list = new ArrayList<MemberVO>();;
 		
 		try {
-			Class.forName(DRIVER);
-			con = DriverManager.getConnection(URL, USER, PASSWORD);
+//			Class.forName(DRIVER);
+//			con = DriverManager.getConnection(URL, USER, PASSWORD);
+			con = ds.getConnection();
 			ptmt = con.prepareStatement(GET_ALL);
 			
 			rs = ptmt.executeQuery();
@@ -261,8 +277,6 @@ public class MemberDAO implements MemberDAO_interface {
 				list.add(memberVO);
 			}
 
-			}catch (ClassNotFoundException e) {
-				e.printStackTrace();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}finally {
@@ -298,8 +312,9 @@ public class MemberDAO implements MemberDAO_interface {
 		ResultSet rs = null;
 
 		try {
-			Class.forName(DRIVER);
-			con = DriverManager.getConnection(URL, USER, PASSWORD);
+//			Class.forName(DRIVER);
+//			con = DriverManager.getConnection(URL, USER, PASSWORD);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(USER_LOGIN);
 
 			pstmt.setString(1, account);
@@ -328,8 +343,6 @@ public class MemberDAO implements MemberDAO_interface {
 				System.out.println("QQ fail");
 			}
 			
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -366,8 +379,9 @@ public class MemberDAO implements MemberDAO_interface {
 		ResultSet rs = null;
 
 		try {
-			Class.forName(DRIVER);
-			con = DriverManager.getConnection(URL, USER, PASSWORD);
+//			Class.forName(DRIVER);
+//			con = DriverManager.getConnection(URL, USER, PASSWORD);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ONE_BY_ACCOUNT);
 
 			pstmt.setString(1, Account);
@@ -393,8 +407,6 @@ public class MemberDAO implements MemberDAO_interface {
 				memberVO.setMemberOnline(rs.getString("MEMBER_ONLINE"));
 			}
 
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -423,4 +435,53 @@ public class MemberDAO implements MemberDAO_interface {
 
 		return memberVO;
 	}
+
+	//IPO場地評價用--根據MEMBER_ID取一個MEMBER_NICKNAME
+		@Override
+		public String showNickname(String memberId) {
+			Connection con = null;
+			PreparedStatement ptmt = null;
+			ResultSet rs = null;
+			
+			String memberNickName = null;
+			try {
+//				Class.forName(DRIVER);
+//				con = DriverManager.getConnection(URL, USER, PASSWORD);
+				con = ds.getConnection();
+				ptmt = con.prepareStatement(GET_ONE_NAME);
+				
+				ptmt.setString(1, memberId);
+				
+				rs = ptmt.executeQuery();
+				
+				while (rs.next()) {
+					memberNickName = rs.getString("MEMBER_NICKNAME");
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (ptmt != null) {
+					try {
+						ptmt.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+			return memberNickName;
+		}
 }

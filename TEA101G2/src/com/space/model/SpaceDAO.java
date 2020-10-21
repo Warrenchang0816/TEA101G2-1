@@ -8,17 +8,34 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 public class SpaceDAO implements SpaceDAO_interface{
 
+	//用DataSource連線
+		private static DataSource ds = null;
+		static {
+			try {
+				Context ctx = new InitialContext();
+				ds = (DataSource)ctx.lookup("java:comp/env/jdbc/TEA101G2");
+			}
+			catch(NamingException e){
+				e.printStackTrace();
+			}
+		}
+	
+	//用JDBC連線
 	String driver = "oracle.jdbc.OracleDriver";
 	String url = "jdbc:oracle:thin:@localhost:1521:XE";
 	String userid = "TEA101G2";
-	String passwd = "TEA101G2";
+	String passwd = "123456";
 	
 
 	private static final String INSERT_STMT = 
-	    "INSERT INTO SPACE VALUES (SPACE_ID_SEQ.NEXTVAL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	    "INSERT INTO SPACE VALUES ('SPACE' || lpad(SPACE_ID_SEQ.NEXTVAL, 5, '0'),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	private static final String SELECT_ALL_STMT = 
 		"SELECT * FROM SPACE order by SPACE_ID";
 	private static final String SELECT_ONE_STMT = 
@@ -26,16 +43,18 @@ public class SpaceDAO implements SpaceDAO_interface{
 	private static final String DELETE = 
 		"DELETE FROM SPACE where SPACE_ID = ?";
 	private static final String UPDATE = 
-		"UPDATE SPACE set MEMBER_ID=?,EMP_ID=?,SPACE_ADDRESS=?,SPACE_LNG=?,SPACE_LAT=?,SPACE_NAME=?,SPACE_TEXT=?,SPACE_TYPE=?,SPACE_EQUMENT=?,SPACE_CONTAIN=?,SPACE_RULE=?,SPACE_REFUND=?,SPACE_STATUS=?,SPACE_SIGNUP_DATE=?,SPACE_ONSALE_DATE=?,SPACE_OFFSALE_DATE=? where SPACE_ID=?";
-	
+		"UPDATE SPACE set SPACE_ADDRESS=?,SPACE_LNG=?,SPACE_LAT=?,SPACE_NAME=?,SPACE_TEXT=?,SPACE_TYPE=?,SPACE_EQUMENT=?,SPACE_CONTAIN=?,SPACE_RULE=?,SPACE_REFUND=?,SPACE_ONSALE_DATE=?,SPACE_OFFSALE_DATE=? where SPACE_ID=?";
+	//上架申請修改space_status
+	private static final String UPDATE_STATUS = 
+		"UPDATE SPACE set SPACE_STATUS=? where SPACE_ID=?";
+
 	@Override
 	public void insert(SpaceVO spaceVO) {
 		Connection con = null;
 		PreparedStatement ptmt = null;
 		
 		try {
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			ptmt = con.prepareStatement(INSERT_STMT);
 			
 			ptmt.setString(1, spaceVO.getMemberId());
@@ -54,12 +73,12 @@ public class SpaceDAO implements SpaceDAO_interface{
 			ptmt.setDate(14, spaceVO.getSpaceSignupDate());
 			ptmt.setDate(15, spaceVO.getSpaceOnsaleDate());
 			ptmt.setDate(16, spaceVO.getSpaceOffsaleDate());
+			ptmt.setString(17, "");
+			ptmt.setString(18, "");
 
 			ptmt.executeUpdate();
 			
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
 			if (ptmt != null) {
@@ -85,17 +104,14 @@ public class SpaceDAO implements SpaceDAO_interface{
 		PreparedStatement ptmt = null;
 
 		try {
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			ptmt = con.prepareStatement(DELETE);
 			
 			ptmt.setString(1, spaceId);
 			
 			ptmt.executeUpdate();
 			
-		}catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (SQLException e) {
+			}catch (Exception e) {
 				e.printStackTrace();
 			}finally {
 				if (ptmt != null) {
@@ -121,33 +137,60 @@ public class SpaceDAO implements SpaceDAO_interface{
 		PreparedStatement ptmt = null;
 		
 		try {
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			ptmt = con.prepareStatement(UPDATE);
 			
-			ptmt.setString(1, spaceVO.getMemberId());
-			ptmt.setString(2, spaceVO.getEmpId());
-			ptmt.setString(3, spaceVO.getSpaceAddress());
-			ptmt.setDouble(4, spaceVO.getSpaceLng());
-			ptmt.setDouble(5, spaceVO.getSpaceLat());
-			ptmt.setString(6, spaceVO.getSpaceName());
-			ptmt.setString(7, spaceVO.getSpaceText());
-			ptmt.setString(8, spaceVO.getSpaceType());
-			ptmt.setString(9, spaceVO.getSpaceEquipment());
-			ptmt.setString(10, spaceVO.getSpaceContain());
-			ptmt.setString(11, spaceVO.getSpaceRule());
-			ptmt.setString(12, spaceVO.getSpaceRefund());
-			ptmt.setString(13, spaceVO.getSpaceStatus());
-			ptmt.setDate(14, spaceVO.getSpaceSignupDate());
-			ptmt.setDate(15, spaceVO.getSpaceOnsaleDate());
-			ptmt.setDate(16, spaceVO.getSpaceOffsaleDate());
-			ptmt.setString(17, spaceVO.getSpaceId());
+			ptmt.setString(1, spaceVO.getSpaceAddress());
+			ptmt.setDouble(2, spaceVO.getSpaceLng());
+			ptmt.setDouble(3, spaceVO.getSpaceLat());
+			ptmt.setString(4, spaceVO.getSpaceName());
+			ptmt.setString(5, spaceVO.getSpaceText());
+			ptmt.setString(6, spaceVO.getSpaceType());
+			ptmt.setString(7, spaceVO.getSpaceEquipment());
+			ptmt.setString(8, spaceVO.getSpaceContain());
+			ptmt.setString(9, spaceVO.getSpaceRule());
+			ptmt.setString(10, spaceVO.getSpaceRefund());
+			ptmt.setDate(11, spaceVO.getSpaceOnsaleDate());
+			ptmt.setDate(12, spaceVO.getSpaceOffsaleDate());
+			ptmt.setString(13, spaceVO.getSpaceId());
 
 			ptmt.executeUpdate();
 			
-		}catch (ClassNotFoundException e) {
+		}catch (Exception e) {
 			e.printStackTrace();
-		}catch (SQLException e) {
+		}finally {
+			if (ptmt != null) {
+				try {
+					ptmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+	}
+	
+	@Override
+	public void updateSpaceStatus(SpaceVO spaceVO) {
+		Connection con = null;
+		PreparedStatement ptmt = null;
+		
+		try {
+			con = ds.getConnection();
+			ptmt = con.prepareStatement(UPDATE_STATUS);
+			
+			ptmt.setString(1, spaceVO.getSpaceStatus());
+			ptmt.setString(2, spaceVO.getSpaceId());
+
+			ptmt.executeUpdate();
+			
+		}catch (Exception e) {
 			e.printStackTrace();
 		}finally {
 			if (ptmt != null) {
@@ -176,8 +219,7 @@ public class SpaceDAO implements SpaceDAO_interface{
 		SpaceVO spaceVO = new SpaceVO();
 		
 		try {
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			ptmt = con.prepareStatement(SELECT_ONE_STMT);
 			
 			ptmt.setString(1, spaceId);
@@ -201,12 +243,9 @@ public class SpaceDAO implements SpaceDAO_interface{
 				spaceVO.setSpaceSignupDate(rs.getDate("SPACE_SIGNUP_DATE"));
 				spaceVO.setSpaceOnsaleDate(rs.getDate("SPACE_ONSALE_DATE"));
 				spaceVO.setSpaceOffsaleDate(rs.getDate("SPACE_OFFSALE_DATE"));
-				
 			}
 
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
 			if (rs != null) {
@@ -243,8 +282,7 @@ public class SpaceDAO implements SpaceDAO_interface{
 		List<SpaceVO> list = new ArrayList<SpaceVO>();;
 		
 		try {
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			ptmt = con.prepareStatement(SELECT_ALL_STMT);
 			
 			rs = ptmt.executeQuery();
@@ -271,9 +309,7 @@ public class SpaceDAO implements SpaceDAO_interface{
 				list.add(spaceVO);
 			}
 
-			}catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (SQLException e) {
+			}catch (Exception e) {
 				e.printStackTrace();
 			}finally {
 				if (rs != null) {
@@ -300,35 +336,21 @@ public class SpaceDAO implements SpaceDAO_interface{
 		return list;
 	}
 
+
 	@Override
-	public List<SpaceVO> searchSpace(String spaceAddress, String spaceType, String spaceContain) {
+	public List<SpaceVO> searchSpace(String subQuery, String spaceAddress, String spaceType, String spaceContain) {
 		Connection con = null;
 		PreparedStatement ptmt = null;
 		ResultSet rs = null;
 		SpaceVO spaceVO = null;
-		List<SpaceVO> list = new ArrayList<SpaceVO>();;
+		List<SpaceVO> list = new ArrayList<SpaceVO>();
 
 		try {
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
-			
-			StringBuffer SEARCH_SPACE = new StringBuffer("SELECT * FROM SPACE WHERE 123=123");
-			
-			if(spaceAddress != null && !spaceAddress.trim().equals("")) {
-				SEARCH_SPACE.append(" AND SPACE_ADDRESS LIKE '%"+spaceAddress+"%'");
-			}
-			
-			if(spaceType != null) {
-				SEARCH_SPACE.append(" AND SPACE_TYPE ='"+spaceType+"'");
-			}
-			
-			if(spaceContain != null && !spaceContain.trim().equals("")) {
-				SEARCH_SPACE.append(" AND SPACE_CONTAIN >= '"+spaceContain+"'");
-			}
-			
-			System.out.println(SEARCH_SPACE.toString());
-			ptmt = con.prepareStatement(SEARCH_SPACE.toString());
-			
+			con = ds.getConnection();
+
+			System.out.println(subQuery.toString());
+			ptmt = con.prepareStatement(subQuery);
+
 			rs = ptmt.executeQuery();
 			while (rs.next()) {
 				spaceVO = new SpaceVO();
@@ -352,32 +374,31 @@ public class SpaceDAO implements SpaceDAO_interface{
 				list.add(spaceVO);
 			}
 
-			}catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}finally {
-				if (rs != null) {
-					try {
-						rs.close();
-					} catch (SQLException se) {
-						se.printStackTrace(System.err);
-					}
-				}
-				if (ptmt != null) {
-					try {
-						ptmt.close();
-					} catch (Exception e) {
-						e.printStackTrace(System.err);
-					}
-				}if (con != null) {
-					try {
-						con.close();
-					} catch (Exception e) {
-						e.printStackTrace(System.err);
-					}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
 				}
 			}
+			if (ptmt != null) {
+				try {
+					ptmt.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
 		return list;
 	}
 }

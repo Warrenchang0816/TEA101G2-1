@@ -40,9 +40,9 @@ public class OrderDetailService {
 		return dao.selectAll();
 	}
 	
-//	public List<OrderDetailVO> selectAllOrderDetailByMaster(String orderMasterId) {
-//		return dao.selectAllByMasterId(orderMasterId);
-//	}
+	public List<OrderDetailVO> selectAllOrderDetailByMaster(String orderMasterId) {
+		return dao.selectAllByMasterId(orderMasterId);
+	}
 	
 	public List<OrderDetailVO> selectAllOrderDetailBySpaceDetail(String spaceDetailId) {
 		List<OrderDetailVO> all = dao.selectAll();
@@ -54,6 +54,5 @@ public class OrderDetailService {
 		
 		return allBySpaceDetail;
 	}
-	
 	
 }

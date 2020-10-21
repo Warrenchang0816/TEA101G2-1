@@ -10,4 +10,5 @@ public interface SpaceDetailDAO_interface {
 	public SpaceDetailVO selectOneLowest(String spaceId);
 	public List<SpaceDetailVO> getAll();
 	public List<SpaceDetailVO> getSpaceIdList(String spaceId);
+	public String selectOneSpaceId(String spaceDetailId);
 }

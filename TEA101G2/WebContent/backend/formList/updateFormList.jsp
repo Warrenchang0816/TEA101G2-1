@@ -119,7 +119,7 @@ java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
 							<div class="form-group">
 								<label>表單圖片</label>
 								<div style="height:300px;" class="form-control" placeholder="Personal info">
-									<img src="<%=(formListVO.getFormListFile() == null)? application.getRealPath("/backend/img/BlobTest3") : "data:image/png;base64," + encode.encodeToString(formListVO.getFormListFile())%>" id="perview"/>
+									<%-- <img src="<%=(formListVO.getFormListFile() == null)? application.getRealPath("/backend/img/BlobTest3") : "data:image/png;base64," + encode.encodeToString(formListVO.getFormListFile())%>" id="perview"/> --%>
 								</div>
 							</div>
 						</div>

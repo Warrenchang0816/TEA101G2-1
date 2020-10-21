@@ -140,7 +140,7 @@ pageContext.setAttribute("onlineList", onlineList);
 </div>
 --%>
 <body >
-<div class="chat-popup" id="onlineList" style="height: 350px; background-color: white; right: 400px; width: 250px;">
+<div class="chat-popup" id="onlineList" style="height: 350px; background-color: white; right: 60%; width: 250px;">
   <div class="form-container">
     <h1 class="chat">在線員工</h1>
     

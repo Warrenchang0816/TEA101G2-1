@@ -67,8 +67,8 @@ public class OrderMasterDAO implements OrderMasterDAOInterface{
 			ptmt.setString(4, orderMasterVO.getOrderStatus());
 
 			ptmt.executeUpdate();
-			
-		} catch (SQLException e) {
+		
+		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
 			if (ptmt != null) {
@@ -88,7 +88,7 @@ public class OrderMasterDAO implements OrderMasterDAOInterface{
 		}
 	}
 	
-	/***********************新增OrderMaster以及OrderDetail***********************/
+	/***********************同時新增OrderMaster以及OrderDetail***********************/
 	@Override
 	public void insertwithOrderDetail(OrderMasterVO orderMasterVO, List<OrderDetailVO> odlist) {
 		Connection con = null;
@@ -179,7 +179,7 @@ public class OrderMasterDAO implements OrderMasterDAOInterface{
 			
 			ptmt.executeUpdate();
 			
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}finally {
 				if (ptmt != null) {
@@ -217,7 +217,7 @@ public class OrderMasterDAO implements OrderMasterDAOInterface{
 			
 			ptmt.executeUpdate();
 			
-		}catch (SQLException e) {
+		}catch (Exception e) {
 			e.printStackTrace();
 		}finally {
 			if (ptmt != null) {
@@ -300,7 +300,7 @@ public class OrderMasterDAO implements OrderMasterDAOInterface{
 				orderMasterVO.setOrderStatus(rs.getString("ORDER_STATUS"));
 			}
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
 			if (rs != null) {
@@ -346,13 +346,13 @@ public class OrderMasterDAO implements OrderMasterDAOInterface{
 				orderMasterVO = new OrderMasterVO();
 				orderMasterVO.setOrderMasterId(rs.getString("ORDER_MASTER_ID"));
 				orderMasterVO.setMemberId(rs.getString("MEMBER_ID"));
-				orderMasterVO.setOrderCreateDate(rs.getDate("ORDER_CREATEDATE"));
+				orderMasterVO.setOrderCreateDate(rs.getDate("ORDER_CREATE_DATE"));
 				orderMasterVO.setOrderAmount(rs.getInt("ORDER_AMOUNT"));
 				orderMasterVO.setOrderStatus(rs.getString("ORDER_STATUS"));
 				list.add(orderMasterVO);
 			}
 
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}finally {
 				if (rs != null) {
